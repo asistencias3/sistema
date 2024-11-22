@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +12,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Links directos, solo para pruebas
+Route::view('/','index')->name('index');
+// Asistencia
+Route::view('/asistencia/index','asistencia.asistencia')->name('asistencia.index');
+//Informes
+Route::view('/informes/index','informes.informes')->name('informes.index');
+//Notificaciones
+Route::view('/notificaciones/index','notificaciones.notificaciones')->name('notificaciones.index');
+//Permisos
+Route::view('/permisos/index','permisos.permisos')->name('permisos.index');
+//QR
+Route::view('/qr/index','qr.qr')->name('qr.index');
+//Usuarios
+Route::view('/usuarios/index','usuarios.usuarios')->name('usuarios.index');
