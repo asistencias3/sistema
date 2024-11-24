@@ -2,17 +2,17 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AsistenciaController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::prefix('asistencias')->name('asistencias.')->group(function () {
+    Route::get('/', [AsistenciaController::class, 'index'])->name('index');
+    Route::get('/create', [AsistenciaController::class, 'create'])->name('create');
+    Route::post('/', [AsistenciaController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [AsistenciaController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [AsistenciaController::class, 'update'])->name('update');
+    Route::delete('/{id}', [AsistenciaController::class, 'destroy'])->name('destroy');
+});
+
 
 Route::get('/', function () {
     return view('welcome');
