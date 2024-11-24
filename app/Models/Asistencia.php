@@ -9,7 +9,7 @@ class Asistencia extends Model
 {
     use HasFactory;
 
-    protected $table = 'sistema_asistencia.asistencias';
+    protected $table = 'asistencias';
 
     protected $fillable = [
         'id_empleado_sucursal', 
