@@ -10,7 +10,7 @@ class Empleados extends Migration
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade');
+            $table->foreignId('id_users')->constrained('users')->onDelete('cascade');
             $table->string('nombre', 20);
             $table->string('apellido_paterno', 15);
             $table->string('apellido_materno', 15);

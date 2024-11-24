@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedTinyInteger('rol')->default(3); // 1: Administradores, 2: Recursos Humanos, 3: Empleados
             $table->rememberToken();
             $table->timestamps();
         });
