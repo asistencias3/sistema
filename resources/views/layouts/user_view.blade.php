@@ -20,10 +20,13 @@
 <body class="text-white font-sans">
 
     <div class="flex">
-        @include('layouts._partials.sidebar')
+        {{-- Sidebar --}}
+        <div class="flex-none">
+            @include('layouts._partials.sidebar')
+        </div>
         
         {{-- Content --}}
-        <div class="flex-1 p-10">
+        <div class="pt-10 pr-4 sm:ml-64 w-full">
             @yield('content')
         </div>
 
