@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <style>
     body{
-        background-color: #0e0e0e;
+        background-color: #ffffff;
     }
 </style>
 <html lang="es">
@@ -12,10 +12,13 @@
     <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     @yield('styles')
 </head>
 
 <body class="text-white font-sans">
+
     <div class="flex">
         @include('layouts._partials.sidebar')
         {{-- Content --}}
