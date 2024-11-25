@@ -29,7 +29,7 @@
             @slot('icon')
                 <ion-icon name="lock-open-outline"></ion-icon>
             @endslot
-            @slot('reference', 'permisos.permisos')
+            @slot('reference', 'permisos.index')
             @slot('name', 'Permisos')
         @endcomponent
 
@@ -37,7 +37,7 @@
             @slot('icon')
                 <ion-icon name="person-outline"></ion-icon>
             @endslot
-            @slot('reference', 'usuarios.usuarios')
+            @slot('reference', 'usuarios.index')
             @slot('name', 'Trabajadores')
         @endcomponent
 
@@ -45,7 +45,7 @@
             @slot('icon')
                 <ion-icon name="checkbox-outline"></ion-icon>
             @endslot
-            @slot('reference', 'asistencia.asistencia')
+            @slot('reference', 'asistencia.index')
             @slot('name', 'Asistencia')
         @endcomponent
         
@@ -53,7 +53,7 @@
             @slot('icon')
                 <ion-icon name="document-text-outline"></ion-icon>
             @endslot
-            @slot('reference', 'informes.informes')
+            @slot('reference', 'informes.index')
             @slot('name', 'Hacer Informe')
         @endcomponent
     </div>

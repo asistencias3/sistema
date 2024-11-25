@@ -21,6 +21,7 @@
 
     <div class="flex">
         @include('layouts._partials.sidebar')
+        
         {{-- Content --}}
         <div class="flex-1 p-10">
             @yield('content')
