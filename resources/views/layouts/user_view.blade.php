@@ -17,7 +17,7 @@
     @yield('styles')
 </head>
 
-<body class="text-white font-sans">
+<body class="font-sans">
 
     <div class="flex">
         {{-- Sidebar --}}

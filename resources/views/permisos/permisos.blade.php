@@ -1,2 +1,8 @@
 {{-- Vista general de notificaciones --}}
-<p>oye informe</p>
+@extends('layouts.user_view')
+
+@section('title', 'Permisos')
+
+@section('content')
+    <h1>Permisos</h1>
+@endsection

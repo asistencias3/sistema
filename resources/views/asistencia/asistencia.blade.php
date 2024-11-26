@@ -117,14 +117,9 @@
 
 @section('content')
 
-
 	<!--Container-->
-	<div class="container w-full px-2">
-
+	<div class="container w-full px-2 text-center">
 		<!--Title-->
-
-
-
 		<!--Card-->
 		<div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-[#fdfcfd] text-gray-950 w-full">
 
@@ -139,39 +134,37 @@
 						<th data-priority="5">Salida</th>
 						<th data-priority="6">Entrada 2</th>
 						<th data-priority="7">Salida 2</th> 
+						<th data-priority="8">Acción</th> 
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-						<td>oye</td>
+						<td>1</td>
+						<td>1</td>
+						<td>10-11-20</td>
+						<td>7:10:25</td>
+						<td>10:10:25</td>
+						<td>5:10:25</td>
+						<td>10:10:25</td>
+						<td><a href="#" class="p-1.5 m-1.5 bg-[#0468BF] rounded font-bold text-[#fdfcfd] hover:bg-[#09487E]">Editar</a><a href="#" class="p-1.5 m-1.5 bg-rose-500 rounded font-bold text-[#fdfcfd] hover:bg-rose-700">Eliminar</a></td>
 					</tr>
-
+					
 					<!-- Rest of your data (refer to https://datatables.net/examples/server_side/ for server side processing)-->
-
+					
 					<tr>
-						<td>Donna Snider</td>
-						<td>Customer Support</td>
-						<td>New York</td>
-						<td>27</td>
-						<td>2011/01/25</td>
-						<td>$112,000</td>
-						<td>oye</td>
+						<td>2</td>
+						<td>1</td>
+						<td>10-11-20</td>
+						<td>7:10:25</td>
+						<td>10:10:25</td>
+						<td>13:10:25</td>
+						<td>16:10:25</td>
+						<td><a href="#" class="p-1.5 m-1.5 bg-[#0468BF] rounded font-bold text-[#fdfcfd] hover:bg-[#09487E]">Editar</a><a href="#" class="p-1.5 m-1.5 bg-rose-500 rounded font-bold text-[#fdfcfd] hover:bg-rose-700">Eliminar</a></td>
 					</tr>
 				</tbody>
-
 			</table>
-
-
 		</div>
 		<!--/Card-->
-
-
 	</div>
 	<!--/container-->
 
