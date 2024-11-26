@@ -3,29 +3,13 @@
 
 @section('title', 'Asistencia')
 
-@section('content')
-    
-
-    <!DOCTYPE html>
-<html lang="en" class="antialiased">
-
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>DataTables </title>
-	<meta name="description" content="">
-	<meta name="keywords" content="">
-	<link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel=" stylesheet">
-	<!--Replace with your tailwind.css once created-->
-
-
-	<!--Regular Datatables CSS-->
+@section('styles')
+    <!--Regular Datatables CSS-->
 	<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
 	<!--Responsive Extension Datatables CSS-->
 	<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
 
-	<style>
+    <style>
 		/*Overrides for Tailwind CSS */
 
 		/*Form fields*/
@@ -47,15 +31,15 @@
 			/*border-2*/
 			border-radius: .25rem;
 			border-color: #edf2f7;
-			/*border-gray-200*/
-			background-color: #edf2f7;
-			/*bg-gray-200*/
+			/*border-gray-200 NO*/
+			background-color: #e6edec;
+			/*bg-gray-200 NO*/
 		}
 
 		/*Row Hover*/
 		table.dataTable.hover tbody tr:hover,
 		table.dataTable.display tbody tr:hover {
-			background-color: #ebf4ff;
+			background-color: #e6edec;
 			/*bg-indigo-100*/
 		}
 
@@ -71,15 +55,15 @@
 
 		/*Pagination Buttons - Current selected */
 		.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-			color: #004643 !important;
-			/*text-white*/
+			color: #fff !important;
+			/*text-white*/ /*BIEN*/
 			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
 			/*shadow*/
 			font-weight: 700;
 			/*font-bold*/
 			border-radius: .25rem;
 			/*rounded*/
-			background: #667eea !important;
+			background: #2e6765!important;
 			/*bg-indigo-500*/
 			border: 1px solid transparent;
 			/*border border-transparent*/
@@ -87,7 +71,7 @@
 
 		/*Pagination Buttons - Hover */
 		.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-			color: #004643 !important;
+			color: #fff !important;
 			/*text-white*/
 			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
 			/*shadow*/
@@ -95,10 +79,23 @@
 			/*font-bold*/
 			border-radius: .25rem;
 			/*rounded*/
-			background: #667eea !important;
-			/*bg-indigo-500*/
 			border: 1px solid transparent;
 			/*border border-transparent*/
+		}
+
+		/* Estilo específico para los botones Previous y Next */
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:hover {
+    color: #ffffff !important; /* Cambia el texto a blanco */
+    background-color: #5e8a89 !important; /* Fondo al hacer hover */
+    border-color: transparent !important;
+}
+
+
+		.paginate_button:hover {
+			background: #5e8a89!important;
+
+			/*bg-indigo-500*/
 		}
 
 		/*Add padding to bottom border */
@@ -116,34 +113,32 @@
 			/*bg-indigo-500*/
 		}
 	</style>
+@endsection
 
-
-
-</head>
-
-<body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
+@section('content')
 
 
 	<!--Container-->
-
-	<div class="container w-5/6">
+	<div class="container w-full px-2">
 
 		<!--Title-->
 
 
+
 		<!--Card-->
-		<div id='recipients' class="p-8 rounded shadow bg-white">
+		<div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-[#fdfcfd] text-gray-950 w-full">
 
 
 			<table id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
 				<thead>
 					<tr>
-						<th data-priority="1">Name</th>
-						<th data-priority="2">Position</th>
-						<th data-priority="3">Office</th>
-						<th data-priority="4">Age</th>
-						<th data-priority="5">Start date</th>
-						<th data-priority="6">Salary</th>
+						<th data-priority="1">Id</th>
+						<th data-priority="2">Id Sucursal</th>
+						<th data-priority="3">Fecha</th>
+						<th data-priority="4">Entrada</th>
+						<th data-priority="5">Salida</th>
+						<th data-priority="6">Entrada 2</th>
+						<th data-priority="7">Salida 2</th> 
 					</tr>
 				</thead>
 				<tbody>
@@ -154,6 +149,7 @@
 						<td>61</td>
 						<td>2011/04/25</td>
 						<td>$320,800</td>
+						<td>oye</td>
 					</tr>
 
 					<!-- Rest of your data (refer to https://datatables.net/examples/server_side/ for server side processing)-->
@@ -165,6 +161,7 @@
 						<td>27</td>
 						<td>2011/01/25</td>
 						<td>$112,000</td>
+						<td>oye</td>
 					</tr>
 				</tbody>
 
@@ -199,7 +196,6 @@
 		});
 	</script>
 
-</body>
 
 </html>
 @endsection
