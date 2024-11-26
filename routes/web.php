@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('/','index')->name('index');
 // Asistencia
 Route::view('/asistencia/index','asistencia.asistencia')->name('asistencia.index');
+Route::view('/asistencia/edit','asistencia.edit')->name('asistencia.edit');
 //Informes
 Route::view('/informes/index','informes.informes')->name('informes.index');
 //Notificaciones
