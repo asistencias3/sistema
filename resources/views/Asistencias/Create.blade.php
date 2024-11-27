@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Nueva Asistencia</h1>
+    <h1>Registro de Asistencia</h1>
     <form action="{{ route('asistencias.store') }}" method="POST">
         @csrf
         <div class="form-group">

@@ -30,4 +30,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('users');
     }
+    public function empleado()
+    {
+        return $this->hasOne(Empleado::class, 'id_usuario'); // 'id_usuario' debe ser la clave foránea en la tabla empleados
+    }
 };
