@@ -23,8 +23,8 @@ class AsistenciaController extends Controller
         $validated = $request->validate([
             'id_empleado_sucursal' => 'required|integer',
             'fecha' => 'required|date',
-            'hora_entrada' => 'nullable|date_format:H:i',
-            'hora_salida' => 'nullable|date_format:H:i',
+            'hora_entrada' => 'required|date_format:H:i',
+            'hora_salida' => 'required|date_format:H:i',
             'hora_segunda_entrada' => 'nullable|date_format:H:i',
             'hora_segunda_salida' => 'nullable|date_format:H:i',
         ]);
