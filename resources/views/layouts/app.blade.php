@@ -30,12 +30,22 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('asistencias.index') }}">Asistencias</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('empleado.index') }}">Validar Empleado</a>
                     </li>
+                    <li class="nav-item">
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-link nav-link" style="display: inline; padding: 0; border: none; background: none;">
+                                Log out
+                            </button>
+                        </form>
+                    </li>
+                    
                 </ul>
             </div>
         </div>
