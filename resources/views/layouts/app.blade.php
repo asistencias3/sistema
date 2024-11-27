@@ -30,7 +30,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('jornada.index') }}">Jornadas</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('asistencias.index') }}">Asistencias</a>
                     </li>

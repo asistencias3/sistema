@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\EmpleadoController;
+use App\Http\Controllers\JornadaController;
+
 
 Route::prefix('asistencias')->name('asistencias.')->group(function () {
     Route::get('/', [AsistenciaController::class, 'index'])->name('index');
@@ -19,11 +21,24 @@ Route::prefix('empleado')->name('empleado.')->group(function () {
     Route::get('/create', [EmpleadoController::class, 'create'])->name('create');
     Route::post('/', [EmpleadoController::class, 'store'])->name('store'); // Importante
 });
+Route::prefix('jornadas')->name('jornada.')->group(function () {
+    Route::get('/', [JornadaController::class, 'index'])->name('index');
+    Route::get('/create', [JornadaController::class, 'create'])->name('create');
+    Route::post('/', [JornadaController::class, 'store'])->name('store');
+    Route::get('/{id}', [JornadaController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [JornadaController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [JornadaController::class, 'update'])->name('update');
+    Route::delete('/{id}', [JornadaController::class, 'destroy'])->name('destroy');
+});
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/historial', function () {
+    return view('historial_asistencias.Index');
+})->name('historial');
 
 Route::get('/dashboard', function () {
     return view('layouts.dashboard');

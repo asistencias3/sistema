@@ -11,14 +11,15 @@ class Jornada extends Model
     protected $table = 'jornadas';
 
     protected $fillable = [
-        'tipo', 
-        'hora_entrada', 
-        'hora_salida', 
-        'minutos_descanso', 
-        'hora_segunda_entrada', 
-        'hora_segunda_salida',
-        'inicio_receso',
-        'fin_receso',
+        'fecha_inicio',
+        'fecha_fin',
+        'tipo',
+        'hora_entrada',
+        'hora_salida',
+        'inicio_descanso',
+        'fin_descanso',
+        'sucursal',
+        'qr_code_data', // Campo para la URL del QR
     ];
 
     public function empleadosSucursales()

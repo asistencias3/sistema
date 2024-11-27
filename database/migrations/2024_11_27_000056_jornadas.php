@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jornadas', function (Blueprint $table) {
-            $table->id();
-            $table->string('tipo', 15);
-            $table->dateTime('hora_entrada');
-            $table->dateTime('hora_salida');
-            $table->dateTime('hora_segunda_entrada')->nullable();
-            $table->dateTime('hora_segunda_salida')->nullable();
-            $table->dateTime('inicio_receso');
-            $table->dateTime('fin_receso');
+            $table->id(); // ID de la jornada
+            $table->dateTime('fecha_inicio');
+            $table->dateTime('fecha_fin');
+            $table->string('tipo');
+            $table->time('hora_entrada');
+            $table->time('hora_salida');
+            $table->time('inicio_descanso');
+            $table->time('fin_descanso');
+            $table->string('sucursal');
+            $table->string('qr_code_data')->nullable(); // Este campo almacenará la URL para generar el QR
             $table->timestamps();
         });
     }
