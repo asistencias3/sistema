@@ -17,6 +17,8 @@ class Jornada extends Model
         'minutos_descanso', 
         'hora_segunda_entrada', 
         'hora_segunda_salida',
+        'inicio_receso',
+        'fin_receso',
     ];
 
     public function empleadosSucursales()

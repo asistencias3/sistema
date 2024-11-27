@@ -17,6 +17,7 @@ class Empleado extends Model
         'apellido_materno', 
         'direccion', 
         'telefono',
+        'sucursal',
     ];
 
     public function usuario()

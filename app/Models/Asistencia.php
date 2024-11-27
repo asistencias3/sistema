@@ -13,6 +13,7 @@ class Asistencia extends Model
 
     protected $fillable = [
         'id_empleado_sucursal', 
+        'estado', 
         'fecha', 
         'hora_entrada', 
         'hora_salida', 
@@ -25,13 +26,4 @@ class Asistencia extends Model
         return $this->belongsTo(EmpleadoSucursal::class);
     }
 
-    public function ausencias()
-    {
-        return $this->belongsToMany(Ausencia::class, 'asistencias_ausencias');
-    }
-
-    public function recesos()
-    {
-        return $this->hasMany(Receso::class);
-    }
 }

@@ -12,13 +12,14 @@ class JustificacionAusencia extends Model
     protected $table = 'justificaciones_ausencia';
 
     protected $fillable = [
-        'id_ausencia', 
+        'id_asistencias', 
         'fecha_creacion', 
         'motivo',
+        'comprobante',
     ];
 
-    public function ausencia()
+    public function asistencia()
     {
-        return $this->belongsTo(Ausencia::class);
+        return $this->belongsTo(Asistencia::class);
     }
 }

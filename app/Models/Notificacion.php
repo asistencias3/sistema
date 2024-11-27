@@ -11,14 +11,14 @@ class Notificacion extends Model
     protected $table = 'notificaciones';
 
     protected $fillable = [
-        'id_ausencia', 
+        'id_asistencias', 
         'encabezado', 
         'mensaje', 
         'fecha_creacion',
     ];
 
-    public function ausencia()
+    public function asistencia()
     {
-        return $this->belongsTo(Ausencia::class);
+        return $this->belongsTo(Asistencia::class);
     }
 }
