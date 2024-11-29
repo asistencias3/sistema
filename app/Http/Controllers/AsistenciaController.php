@@ -9,13 +9,18 @@ class AsistenciaController extends Controller
 {
     public function index()
     {
+        // Obtener todas las asistencias con la relación 'empleadoSucursal' (empleado asociado)
         $asistencias = Asistencia::with('empleadoSucursal')->get();
+
+        // Pasar los datos a la vista
         return view('Asistencias.Index', compact('asistencias'));
     }
 
     public function create()
     {
-        return view('Asistencias.Create');
+        // Obtener todos los empleados activos para el select
+        $empleados = User::where('activo', 1)->get();
+        return view('Asistencias.Create', compact('empleados'));
     }
 
     public function store(Request $request)
@@ -36,8 +41,10 @@ class AsistenciaController extends Controller
 
     public function edit($id)
     {
+        // Obtener la asistencia a editar y todos los empleados activos
         $asistencia = Asistencia::findOrFail($id);
-        return view('Asistencias.Edit', compact('asistencia'));
+        $empleados = User::where('activo', 1)->get();
+        return view('Asistencias.Edit', compact('asistencia', 'empleados'));
     }
 
     public function update(Request $request, $id)
