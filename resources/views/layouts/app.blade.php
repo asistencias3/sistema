@@ -48,9 +48,9 @@
             @endif
 
             @yield('content')
-
+            <br>
             <!-- Footer -->
-            <div class="sm:ml-64 fixed inset-x-0 bottom-0">
+            <div class="bottom-0">
                 <footer class="text-center mt-4 py-4">
                     <p class="">&copy; {{ date('Y') }} Sistema de Gestión de Asistencias. Todos los derechos
                         reservados.</p>
