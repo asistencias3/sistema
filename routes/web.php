@@ -33,8 +33,8 @@ Route::prefix('jornadas')->name('jornada.')->group(function () {
 
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('index');
+})->name('index');
 
 Route::get('/historial', function () {
     return view('historial_asistencias.Index');
@@ -50,4 +50,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

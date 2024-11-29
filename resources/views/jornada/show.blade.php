@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Detalles de la Jornada</h1>
+    <h1 class="text-2xl font-bold">Detalles de la Jornada</h1>
 
     <div>
         <p><strong>Fecha de Inicio:</strong> {{ $jornada->fecha_inicio }}</p>
