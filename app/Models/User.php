@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol',
     ];
 
     /**
@@ -42,4 +43,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function empleado()
+    {
+        return $this->hasOne(Empleado::class, 'id_usuario'); // Asegúrate de que 'id_usuario' sea la clave foránea en empleados
+    }
 }

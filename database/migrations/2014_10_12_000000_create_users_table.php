@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedTinyInteger('rol')->default(3); // 1: Administradores, 2: Recursos Humanos, 3: Empleados
             $table->rememberToken();
             $table->timestamps();
         });
@@ -28,5 +29,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+    }
+    public function empleado()
+    {
+        return $this->hasOne(Empleado::class, 'id_usuario'); // 'id_usuario' debe ser la clave foránea en la tabla empleados
     }
 };
