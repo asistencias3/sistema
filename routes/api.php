@@ -17,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// routes/api.php
+use App\Models\User;
+
+Route::get('empleados/{rol}', function ($rol) {
+    // Filtra los empleados por rol
+    $empleados = User::where('rol', $rol)->get();
+    return response()->json($empleados);
+});
+

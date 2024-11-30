@@ -131,20 +131,38 @@ public function edit($id)
     }
     
     
-
     public function generarPdf(Request $request)
 {
-    $filterRol = $request->has('rol') && !empty($request->input('rol'));
     $rol = $request->input('rol');
+    $empleadoId = $request->input('id_empleado');
+
     $query = Asistencia::query()->with('empleadoSucursal');
-    if ($filterRol) {
+
+    if (!empty($rol)) {
         $query->whereHas('empleadoSucursal', function ($q) use ($rol) {
             $q->where('rol', $rol);
         });
     }
+
+    if (!empty($empleadoId)) {
+        $query->where('id_empleado', $empleadoId);
+    }
+
     $asistencias = $query->get();
+
     $pdf = Pdf::loadView('Asistencias.Index', compact('asistencias'));
     return $pdf->download('Reporte_Asistencias.pdf');
+}
+
+
+    public function getEmpleadosPorRol(Request $request)
+{
+    $rol = $request->input('rol');
+
+    // Filtrar empleados según el rol seleccionado
+    $empleados = User::where('rol', $rol)->get(['id', 'name']); // Ajusta los campos según tu tabla
+
+    return response()->json($empleados);
 }
 
 }
