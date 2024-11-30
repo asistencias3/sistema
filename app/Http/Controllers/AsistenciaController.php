@@ -6,6 +6,7 @@ use App\Models\Asistencia;
 use App\Models\user;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class AsistenciaController extends Controller
 {
@@ -16,50 +17,99 @@ class AsistenciaController extends Controller
     }
 
     public function create()
-    {
-        $empleados = User::where('activo', 1)->get();
-        return view('Asistencias.Create', compact('empleados'));
+{
+    $empleados = User::all();
+    return view('Asistencias.Create', compact('empleados'));
+}
+
+
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'id_empleado_sucursal' => 'required|exists:users,id', 
+        'fecha' => 'required|date',
+        'hora_entrada' => 'required|date_format:H:i',
+        'hora_salida' => 'required|date_format:H:i',
+        'hora_segunda_entrada' => 'nullable|date_format:H:i',
+        'hora_segunda_salida' => 'nullable|date_format:H:i',
+    ]);
+
+    $validated['hora_entrada'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_entrada']);
+    $validated['hora_salida'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_salida']);
+    $validated['hora_segunda_entrada'] = $validated['hora_segunda_entrada'] 
+        ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_entrada']) 
+        : null;
+    $validated['hora_segunda_salida'] = $validated['hora_segunda_salida'] 
+        ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_salida']) 
+        : null;
+
+  
+    $validated['id_empleado'] = $validated['id_empleado_sucursal'];  
+
+    
+    Asistencia::create($validated);
+
+    return redirect()->route('asistencias.index')->with('success', 'Asistencia creada con éxito.');
+}
+
+
+
+private function combineDateAndTime($date, $time)
+{
+   
+    return $date . ' ' . $time . ':00';
+}
+
+public function edit($id)
+{
+    $asistencia = Asistencia::findOrFail($id);
+    $empleados = User::all();
+
+    
+    $asistencia->hora_entrada = Carbon::parse($asistencia->hora_entrada);
+    $asistencia->hora_salida = Carbon::parse($asistencia->hora_salida);
+    if ($asistencia->hora_segunda_entrada) {
+        $asistencia->hora_segunda_entrada = Carbon::parse($asistencia->hora_segunda_entrada);
+    }
+    if ($asistencia->hora_segunda_salida) {
+        $asistencia->hora_segunda_salida = Carbon::parse($asistencia->hora_segunda_salida);
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'id_empleado_sucursal' => 'required|integer',
-            'fecha' => 'required|date',
-            'hora_entrada' => 'required|date_format:H:i',
-            'hora_salida' => 'required|date_format:H:i',
-            'hora_segunda_entrada' => 'nullable|date_format:H:i',
-            'hora_segunda_salida' => 'nullable|date_format:H:i',
-        ]);
-
-        Asistencia::create($validated);
-
-        return redirect()->route('asistencias.index')->with('success', 'Asistencia creada con éxito.');
-    }
-
-    public function edit($id)
-    {
-        $asistencia = Asistencia::findOrFail($id);
-        $empleados = User::where('activo', 1)->get();
-        return view('Asistencias.Edit', compact('asistencia', 'empleados'));
-    }
+    return view('Asistencias.Edit', compact('asistencia', 'empleados'));
+}
 
     public function update(Request $request, $id)
     {
+        
         $validated = $request->validate([
-            'id_empleado_sucursal' => 'required|integer',
+            'id_empleado_sucursal' => 'required|integer|exists:users,id', 
             'fecha' => 'required|date',
             'hora_entrada' => 'nullable|date_format:H:i',
             'hora_salida' => 'nullable|date_format:H:i',
             'hora_segunda_entrada' => 'nullable|date_format:H:i',
             'hora_segunda_salida' => 'nullable|date_format:H:i',
         ]);
-
+    
+        
         $asistencia = Asistencia::findOrFail($id);
+    
+       
+        $validated['hora_entrada'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_entrada']);
+        $validated['hora_salida'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_salida']);
+        $validated['hora_segunda_entrada'] = $validated['hora_segunda_entrada'] 
+            ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_entrada']) 
+            : null;
+        $validated['hora_segunda_salida'] = $validated['hora_segunda_salida'] 
+            ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_salida']) 
+            : null;
+    
+       
         $asistencia->update($validated);
-
+    
+        
         return redirect()->route('asistencias.index')->with('success', 'Asistencia actualizada con éxito.');
     }
+    
 
     public function destroy($id)
     {
