@@ -82,6 +82,7 @@ class JornadaController extends Controller
     // Actualiza la jornada en la base de datos
     public function update(Request $request, $id)
     {
+
         // Validar los datos
         $request->validate([
             'fecha_inicio' => 'required|date',
@@ -93,8 +94,10 @@ class JornadaController extends Controller
             'fin_descanso' => 'required|date_format:H:i',
             'sucursal' => 'required|string',
         ]);
+        
 
         $jornada = Jornada::findOrFail($id); // Buscar la jornada
+        
 
         // Actualizar los datos de la jornada
         $jornada->update([
@@ -106,8 +109,8 @@ class JornadaController extends Controller
             'inicio_descanso' => $request->inicio_descanso,
             'fin_descanso' => $request->fin_descanso,
             'sucursal' => $request->sucursal,
-            'qr_code_data' => route('jornada.show', $jornada->id), // Actualizar URL del QR
         ]);
+        
 
         return redirect()->route('jornada.index')->with('success', 'Jornada actualizada con éxito!');
     }
