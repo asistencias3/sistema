@@ -158,11 +158,47 @@ public function edit($id)
     public function getEmpleadosPorRol(Request $request)
 {
     $rol = $request->input('rol');
-
-    // Filtrar empleados según el rol seleccionado
-    $empleados = User::where('rol', $rol)->get(['id', 'name']); // Ajusta los campos según tu tabla
+    $empleados = User::where('rol', $rol)->get(['id', 'name']); 
 
     return response()->json($empleados);
+}
+
+public function mostrarInasistenciasView()
+{
+    return view('inasistencias'); 
+}
+
+public function obtenerInasistencias(Request $request)
+{
+   
+    $request->validate([
+        'fecha_inicio' => 'required|date',
+        'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+    ]);
+
+    
+    $fechaInicio = $request->input('fecha_inicio');
+    $fechaFin = $request->input('fecha_fin');
+
+    
+    $inasistencias = User::select('users.name', 'users.rol', 'users.email')
+        ->join('asistencias', 'users.id', '=', 'asistencias.id_empleado')
+        ->where('asistencias.estado', 0) 
+        ->whereBetween('asistencias.fecha', [$fechaInicio, $fechaFin])
+        ->groupBy('users.id', 'users.name', 'users.rol', 'users.email')
+        ->get()
+        ->map(function ($user) {
+            
+            $roles = [
+                1 => 'Administrador',
+                2 => 'Recursos Humanos',
+                3 => 'Empleado',
+            ];
+            $user->rol = $roles[$user->rol] ?? 'Desconocido'; 
+            return $user;
+        });
+
+    return response()->json($inasistencias);
 }
 
 }

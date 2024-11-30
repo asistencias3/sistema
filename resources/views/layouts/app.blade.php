@@ -37,6 +37,9 @@
                         <a class="nav-link" href="{{ route('asistencias.index') }}">Asistencias</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('inasistencias.view') }}">Inasistencias</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('empleado.index') }}">Validar Empleado</a>
                     </li>
                     <li class="nav-item">
