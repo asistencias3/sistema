@@ -6,6 +6,9 @@ use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\JornadaController;
 
+Route::get('asistencias/filtro-pdf', [AsistenciaController::class, 'filtroPdf'])->name('asistencias.filtroPdf');
+Route::get('asistencias/generar-pdf', [AsistenciaController::class, 'generarPdf'])->name('asistencias.generarPdf');
+
 
 Route::prefix('asistencias')->name('asistencias.')->group(function () {
     Route::get('/', [AsistenciaController::class, 'index'])->name('index');

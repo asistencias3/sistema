@@ -3,22 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
+use App\Models\user;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AsistenciaController extends Controller
 {
     public function index()
     {
-        // Obtener todas las asistencias con la relación 'empleadoSucursal' (empleado asociado)
         $asistencias = Asistencia::with('empleadoSucursal')->get();
-
-        // Pasar los datos a la vista
         return view('Asistencias.Index', compact('asistencias'));
     }
 
     public function create()
     {
-        // Obtener todos los empleados activos para el select
         $empleados = User::where('activo', 1)->get();
         return view('Asistencias.Create', compact('empleados'));
     }
@@ -41,7 +39,6 @@ class AsistenciaController extends Controller
 
     public function edit($id)
     {
-        // Obtener la asistencia a editar y todos los empleados activos
         $asistencia = Asistencia::findOrFail($id);
         $empleados = User::where('activo', 1)->get();
         return view('Asistencias.Edit', compact('asistencia', 'empleados'));
@@ -71,4 +68,33 @@ class AsistenciaController extends Controller
 
         return redirect()->route('asistencias.index')->with('success', 'Asistencia eliminada con éxito.');
     }
+
+    public function filtroPdf()
+    {
+        $roles = [
+            1 => 'Administrador',
+            2 => 'Recursos Humanos',
+            3 => 'Empleado',
+        ];
+    
+        return view('Asistencias.Filtro_Pdf_Asistencias', compact('roles'));
+    }
+    
+    
+
+    public function generarPdf(Request $request)
+{
+    $filterRol = $request->has('rol') && !empty($request->input('rol'));
+    $rol = $request->input('rol');
+    $query = Asistencia::query()->with('empleadoSucursal');
+    if ($filterRol) {
+        $query->whereHas('empleadoSucursal', function ($q) use ($rol) {
+            $q->where('rol', $rol);
+        });
+    }
+    $asistencias = $query->get();
+    $pdf = Pdf::loadView('Asistencias.Index', compact('asistencias'));
+    return $pdf->download('Reporte_Asistencias.pdf');
+}
+
 }
