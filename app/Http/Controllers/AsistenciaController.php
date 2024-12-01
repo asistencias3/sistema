@@ -165,7 +165,7 @@ public function edit($id)
 
 public function mostrarInasistenciasView()
 {
-    return view('inasistencias'); 
+    return view('Inasistencias'); 
 }
 
 public function obtenerInasistencias(Request $request)
