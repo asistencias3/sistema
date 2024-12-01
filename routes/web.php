@@ -50,4 +50,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/* Vista de prueba - Julissa*/
+Route::view('usuarios/', 'usuarios.index')->name('usuario.index');
 require __DIR__ . '/auth.php';

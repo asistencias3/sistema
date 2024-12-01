@@ -37,14 +37,22 @@
         @slot('reference', 'permisos.index')
         @slot('name', 'Permisos')
         @endcomponent
-        
+    --}}
         @component('_components.boxSidebar ')
-        @slot('icon')
-        <ion-icon name="person-outline"></ion-icon>
-        @endslot
-        @slot('reference', 'usuarios.index')
-        @slot('name', 'Trabajadores')
-        @endcomponent --}}
+            @slot('icon')
+                <ion-icon name="people-outline"></ion-icon>
+            @endslot
+            @slot('reference', 'usuario.index')
+            @slot('name', 'Usuarios')
+        @endcomponent
+
+        @component('_components.boxSidebar ')
+            @slot('icon')
+                <ion-icon name="person-outline"></ion-icon>
+            @endslot
+            @slot('reference', 'empleado.index')
+            @slot('name', 'Empleados')
+        @endcomponent
 
         @component('_components.boxSidebar ')
             @slot('icon')

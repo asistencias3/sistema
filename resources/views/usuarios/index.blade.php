@@ -4,5 +4,5 @@
 @section('title', 'Usuarios')
 
 @section('content')
-    <h1>Usuarios</h1>
+    <h1 class="text-2xl font-bold text-[#004643]">Usuarios</h1>
 @endsection
