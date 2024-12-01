@@ -180,25 +180,74 @@ public function obtenerInasistencias(Request $request)
     $fechaInicio = $request->input('fecha_inicio');
     $fechaFin = $request->input('fecha_fin');
 
-    
-    $inasistencias = User::select('users.name', 'users.rol', 'users.email')
-        ->join('asistencias', 'users.id', '=', 'asistencias.id_empleado')
-        ->where('asistencias.estado', 0) 
-        ->whereBetween('asistencias.fecha', [$fechaInicio, $fechaFin])
-        ->groupBy('users.id', 'users.name', 'users.rol', 'users.email')
+   
+    $inasistencias = User::select('users.id', 'users.name', 'users.rol', 'users.email')
+        ->with(['asistencias' => function ($query) use ($fechaInicio, $fechaFin) {
+            $query->where('estado', 0)
+                ->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+        }])
+        ->whereHas('asistencias', function ($query) use ($fechaInicio, $fechaFin) {
+            $query->where('estado', 0)
+                ->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+        })
         ->get()
         ->map(function ($user) {
-            
+           
             $roles = [
                 1 => 'Administrador',
                 2 => 'Recursos Humanos',
                 3 => 'Empleado',
             ];
-            $user->rol = $roles[$user->rol] ?? 'Desconocido'; 
+            $user->rol = $roles[$user->rol] ?? 'Desconocido';
+            $user->total_inasistencias = $user->asistencias->count();
+            $user->fechas_inasistencias = $user->asistencias->pluck('fecha');
             return $user;
         });
-
     return response()->json($inasistencias);
 }
+
+ 
+ public function filtroPdfI()
+ {
+     $roles = [
+         1 => 'Administrador',
+         2 => 'Recursos Humanos',
+         3 => 'Empleado',
+     ];
+
+     return view('Asistencias.Filtro_Pdf_Inasistencias', compact('roles'));
+ }
+
+  public function generarPdfI(Request $request)
+ {
+     $rol = $request->input('rol');
+     $empleadoId = $request->input('id_empleado');
+
+     $query = Asistencia::query()->with('empleadoSucursal');
+
+     if (!empty($rol)) {
+         $query->whereHas('empleadoSucursal', function ($q) use ($rol) {
+             $q->where('rol', $rol);
+         });
+     }
+
+     if (!empty($empleadoId)) {
+         $query->where('id_empleado', $empleadoId);
+     }
+
+     $inasistencias = $query->get();
+
+     $pdf = Pdf::loadView('Asistencias.Pdf_Inasistencias', compact('inasistencias'));
+     return $pdf->download('Reporte_Inasistencias.pdf');
+ }
+
+ 
+ public function getEmpleadosPorRolI(Request $request)
+ {
+     $rol = $request->input('rol');
+     $empleados = User::where('rol', $rol)->get(['id', 'name']);
+
+     return response()->json($empleados);
+ }
 
 }

@@ -3,6 +3,9 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">Reporte de Inasistencias</h1>
+    <a href="{{ route('inasistencias.filtroPdf') }}" class="btn btn-secondary">
+            <i class="fas fa-file-pdf"></i> Reporte
+        </a>
     <form id="inasistenciasForm" method="POST" class="mb-4">
         @csrf
         <div class="row">
@@ -47,8 +50,56 @@
             if (data.length > 0) {
                 data.forEach(usuario => {
                     const item = document.createElement('div');
-                    item.classList.add('list-group-item');
-                    item.textContent = `Nombre: ${usuario.name}, Rol: ${usuario.rol}, Email: ${usuario.email}`;
+                    item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+                    
+                
+                    const userInfo = document.createElement('div');
+                    userInfo.innerHTML = `
+                        <strong>Nombre:</strong> ${usuario.name}, 
+                        <strong>Rol:</strong> ${usuario.rol}, 
+                        <strong>Email:</strong> ${usuario.email}
+                    `;
+
+                    
+                    const totalInfo = document.createElement('div');
+                    totalInfo.innerHTML = `
+                        <span class="badge bg-primary rounded-pill">
+                            ${usuario.total_inasistencias} inasistencias
+                        </span>
+                    `;
+
+                   
+                    const fechasDiv = document.createElement('div');
+                    fechasDiv.style.marginTop = '10px';
+                    fechasDiv.style.display = 'none'; 
+                    fechasDiv.innerHTML = `
+                        <strong>Fechas de inasistencias:</strong>
+                        <ul>
+                            ${usuario.fechas_inasistencias.map(fecha => `<li>${fecha}</li>`).join('')}
+                        </ul>
+                    `;
+
+                    
+                    const button = document.createElement('button');
+                    button.textContent = 'Ver fechas';
+                    button.classList.add('btn', 'btn-link', 'ms-3');
+                    button.style.textDecoration = 'none';
+                    button.addEventListener('click', function () {
+                        if (fechasDiv.style.display === 'none') {
+                            fechasDiv.style.display = 'block';
+                            button.textContent = 'Ocultar fechas';
+                        } else {
+                            fechasDiv.style.display = 'none';
+                            button.textContent = 'Ver fechas';
+                        }
+                    });
+
+                   
+                    item.appendChild(userInfo);
+                    item.appendChild(totalInfo);
+                    item.appendChild(button);
+                    item.appendChild(fechasDiv);
+
                     resultadosDiv.appendChild(item);
                 });
             } else {

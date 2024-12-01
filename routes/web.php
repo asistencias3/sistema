@@ -6,6 +6,13 @@ use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\JornadaController;
 
+
+Route::prefix('inasistencias')->group(function () {
+    Route::get('/filtro-pdf', [AsistenciaController::class, 'filtroPdfI'])->name('inasistencias.filtroPdf');
+    Route::get('/generar-pdf', [AsistenciaController::class, 'generarPdfI'])->name('inasistencias.generarPdf');
+    Route::post('/get-empleados', [AsistenciaController::class, 'getEmpleadosPorRolI'])->name('inasistencias.getEmpleados');
+});
+
 Route::get('asistencias/filtro-pdf', [AsistenciaController::class, 'filtroPdf'])->name('asistencias.filtroPdf');
 Route::get('asistencias/generar-pdf', [AsistenciaController::class, 'generarPdf'])->name('asistencias.generarPdf');
 Route::post('/get-empleados', [AsistenciaController::class, 'getEmpleadosPorRol'])->name('get.empleados');

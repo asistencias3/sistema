@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de asistencias</title>
+    <title>Reporte de Inasistencias</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,9 +72,8 @@
     <div class="report-info">
         <p>Fecha del reporte: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
     </div>
-        <h1>Reporte de Asistencias</h1>
-        <div class="subtitle">Listado detallado de las asistencias registradas</div>
-    </div>
+    <h1>Reporte de Inasistencias</h1>
+    <div class="subtitle">Listado detallado de las inasistencias registradas</div>
 
     <table class="striped">
         <thead>
@@ -83,26 +82,28 @@
                 <th>Nombre</th>
                 <th>Rol</th>
                 <th>Fecha</th>
-                <th>Hora</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($asistencias as $asistencia)
+            @forelse ($inasistencias as $inasistencia)
                 <tr>
-                    <td>{{ $asistencia->id }}</td>
-                    <td>{{ $asistencia->empleadoSucursal->name }}</td>
+                    <td>{{ $inasistencia->id }}</td>
+                    <td>{{ $inasistencia->empleadoSucursal->name }}</td>
                     <td>
-                        @switch($asistencia->empleadoSucursal->rol)
+                        @switch($inasistencia->empleadoSucursal->rol)
                             @case(1) Administrador @break
                             @case(2) Recursos Humanos @break
                             @case(3) Empleado @break
                             @default Desconocido
                         @endswitch
                     </td>
-                    <td>{{ $asistencia->fecha }}</td>
-                    <td>{{ $asistencia->hora }}</td>
+                    <td>{{ $inasistencia->fecha }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4" class="empty-message">No se encontraron inasistencias para los criterios seleccionados.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 
