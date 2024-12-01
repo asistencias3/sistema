@@ -47,4 +47,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Empleado::class, 'id_usuario'); // Asegúrate de que 'id_usuario' sea la clave foránea en empleados
     }
+    public function asistencias()
+    {
+        return $this->hasMany(Asistencia::class, 'id_empleado');
+    }
+    
+    
 }

@@ -2,47 +2,23 @@
 
 @section('content')
 <div class="container">
-    <h1>Detalles de la Jornada</h1>
+    <h1 class="text-2xl font-bold">Detalles de la Jornada</h1>
 
-    <table class="table">
-        <tr>
-            <th>Fecha Inicio:</th>
-            <td>{{ $jornada->fecha_inicio }}</td>
-        </tr>
-        <tr>
-            <th>Fecha Fin:</th>
-            <td>{{ $jornada->fecha_fin }}</td>
-        </tr>
-        <tr>
-            <th>Tipo:</th>
-            <td>{{ $jornada->tipo }}</td>
-        </tr>
-        <tr>
-            <th>Hora de Entrada:</th>
-            <td>{{ $jornada->hora_entrada }}</td>
-        </tr>
-        <tr>
-            <th>Hora de Salida:</th>
-            <td>{{ $jornada->hora_salida }}</td>
-        </tr>
-        <tr>
-            <th>Inicio de Descanso:</th>
-            <td>{{ $jornada->inicio_descanso }}</td>
-        </tr>
-        <tr>
-            <th>Fin de Descanso:</th>
-            <td>{{ $jornada->fin_descanso }}</td>
-        </tr>
-        <tr>
-            <th>Sucursal:</th>
-            <td>{{ $jornada->sucursal }}</td>
-        </tr>
-        <tr>
-            <th>Código QR:</th>
-            <td>{!! $qrCode !!}</td> <!-- Mostrar el QR generado -->
-        </tr>
-    </table>
+    <div>
+        <p><strong>Fecha de Inicio:</strong> {{ $jornada->fecha_inicio }}</p>
+        <p><strong>Fecha de Fin:</strong> {{ $jornada->fecha_fin }}</p>
+        <p><strong>Tipo:</strong> {{ $jornada->tipo }}</p>
+        <p><strong>Hora de Entrada:</strong> {{ $jornada->hora_entrada }}</p>
+        <p><strong>Hora de Salida:</strong> {{ $jornada->hora_salida }}</p>
+        <p><strong>Inicio de Descanso:</strong> {{ $jornada->inicio_descanso }}</p>
+        <p><strong>Fin de Descanso:</strong> {{ $jornada->fin_descanso }}</p>
+        <p><strong>Sucursal:</strong> {{ $jornada->sucursal }}</p>
+    </div>
 
-    <a href="{{ route('jornada.index') }}" class="btn btn-secondary">Volver</a>
-</div>
-@endsection
+    <!-- Aquí puedes agregar el código QR -->
+    <div>
+        <h4>Generar QR</h4>
+        {{-- {!! QrCode::size(250)->generate(route('jornada.show', $jornada->id)); !!} --}}
+    </div>
+
+    <a href="{{ route('jornada.index') }}" class="btn btn-secondary mt-3">Volver al Historial</a>
