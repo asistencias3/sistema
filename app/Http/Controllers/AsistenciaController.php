@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
-use App\Models\user;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -133,6 +133,8 @@ public function edit($id)
     
     public function generarPdf(Request $request)
 {
+    $asistencias = Asistencia::all(); // o cualquier consulta que estés realizando
+    $empleadoId = $request->empleadoId ?? null; // El ID del empleado, si es que existe
     $rol = $request->input('rol');
     $empleadoId = $request->input('id_empleado');
 
@@ -150,9 +152,13 @@ public function edit($id)
 
     $asistencias = $query->get();
 
-    $pdf = Pdf::loadView('Asistencias.Index', compact('asistencias'));
+    // Cargar la nueva vista para el reporte
+    $pdf = Pdf::loadView('Asistencias.ReportePdf', compact('asistencias', 'rol', 'empleadoId'))
+               ->setPaper('a4', 'portrait');  // Se puede ajustar el tamaño y la orientación del papel si es necesario
+
     return $pdf->download('Reporte_Asistencias.pdf');
 }
+
 
 
     public function getEmpleadosPorRol(Request $request)

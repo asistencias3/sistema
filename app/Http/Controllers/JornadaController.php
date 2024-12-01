@@ -20,16 +20,27 @@ class JornadaController extends Controller
 
     public function store(Request $request)
 {
-    $validatedData = $request->validate([
-        'fecha_inicio' => 'required|date',
-        'fecha_fin' => 'required|date',
-        'tipo' => 'required|string',
-        'hora_entrada' => 'required|date_format:H:i',
-        'hora_salida' => 'required|date_format:H:i',
-        'inicio_descanso' => 'required|date_format:H:i',
-        'fin_descanso' => 'required|date_format:H:i',
-        'sucursal' => 'required|string',
-    ]);
+    $validatedData = $request->validate(
+        [
+            'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'tipo' => 'required|string',
+            'hora_entrada' => 'required|date_format:H:i',
+            'hora_salida' => 'required|date_format:H:i|after:hora_entrada',
+            'inicio_descanso' => 'required|date_format:H:i|after:hora_entrada|before:hora_salida',
+            'fin_descanso' => 'required|date_format:H:i|after:inicio_descanso|before:hora_salida',
+            'sucursal' => 'required|string',
+        ],
+        [
+            'fecha_inicio.before_or_equal' => 'La fecha de inicio debe ser igual o anterior a la fecha de fin.',
+            'fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
+            'hora_salida.after' => 'La hora de salida debe ser posterior a la hora de entrada.',
+            'inicio_descanso.after' => 'El inicio del descanso debe ser después de la hora de entrada.',
+            'inicio_descanso.before' => 'El inicio del descanso debe ser antes de la hora de salida.',
+            'fin_descanso.after' => 'El fin del descanso debe ser después del inicio del descanso.',
+            'fin_descanso.before' => 'El fin del descanso debe ser antes de la hora de salida.',
+        ]
+    );
 
     $jornada = Jornada::create([
         'fecha_inicio' => $request->fecha_inicio,
@@ -42,12 +53,9 @@ class JornadaController extends Controller
         'sucursal' => $request->sucursal,
     ]);
 
-    $jornada->qr_code_data = route('jornada.show', ['id' => $jornada->id]);
-
-    $jornada->save();
-
     return redirect()->route('jornada.index')->with('success', 'Jornada creada con éxito!');
 }
+
 
 
     public function show($id)
@@ -65,38 +73,48 @@ class JornadaController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-
-        // Validar los datos
-        $request->validate([
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date',
+{
+    $validatedData = $request->validate(
+        [
+            'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
             'tipo' => 'required|string',
             'hora_entrada' => 'required|date_format:H:i',
-            'hora_salida' => 'required|date_format:H:i',
-            'inicio_descanso' => 'required|date_format:H:i',
-            'fin_descanso' => 'required|date_format:H:i',
+            'hora_salida' => 'required|date_format:H:i|after:hora_entrada',
+            'inicio_descanso' => 'required|date_format:H:i|after:hora_entrada|before:hora_salida',
+            'fin_descanso' => 'required|date_format:H:i|after:inicio_descanso|before:hora_salida',
             'sucursal' => 'required|string',
-        ]);
-        
+        ],
+        [
+            'fecha_inicio.before_or_equal' => 'La fecha de inicio debe ser igual o anterior a la fecha de fin.',
+            'fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
+            'hora_salida.after' => 'La hora de salida debe ser posterior a la hora de entrada.',
+            'inicio_descanso.after' => 'El inicio del descanso debe ser después de la hora de entrada.',
+            'inicio_descanso.before' => 'El inicio del descanso debe ser antes de la hora de salida.',
+            'fin_descanso.after' => 'El fin del descanso debe ser después del inicio del descanso.',
+            'fin_descanso.before' => 'El fin del descanso debe ser antes de la hora de salida.',
+        ]
+    );
 
-        $jornada = Jornada::findOrFail($id); // Buscar la jornada
-        
+    // Buscar la jornada por ID
+    $jornada = Jornada::findOrFail($id);
 
-        $jornada->update([
-            'fecha_inicio' => $request->fecha_inicio,
-            'fecha_fin' => $request->fecha_fin,
-            'tipo' => $request->tipo,
-            'hora_entrada' => $request->hora_entrada,
-            'hora_salida' => $request->hora_salida,
-            'inicio_descanso' => $request->inicio_descanso,
-            'fin_descanso' => $request->fin_descanso,
-            'sucursal' => $request->sucursal,
-        ]);
-        
+    // Actualizar los datos
+    $jornada->update([
+        'fecha_inicio' => $request->fecha_inicio,
+        'fecha_fin' => $request->fecha_fin,
+        'tipo' => $request->tipo,
+        'hora_entrada' => $request->hora_entrada,
+        'hora_salida' => $request->hora_salida,
+        'inicio_descanso' => $request->inicio_descanso,
+        'fin_descanso' => $request->fin_descanso,
+        'sucursal' => $request->sucursal,
+    ]);
 
-        return redirect()->route('jornada.index')->with('success', 'Jornada actualizada con éxito!');
-    }
+    return redirect()->route('jornada.index')->with('success', 'Jornada actualizada con éxito!');
+}
+
+
 
     public function destroy($id)
     {
