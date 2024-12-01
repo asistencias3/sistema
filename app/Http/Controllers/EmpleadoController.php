@@ -10,7 +10,6 @@ class EmpleadoController extends Controller
 {
     public function index()
     {
-        // Filtrar usuarios que no están en la tabla empleados
         $usuarios = User::whereDoesntHave('empleado')->get();
     
         return view('Empleados.Index', compact('usuarios'));
@@ -21,14 +20,12 @@ class EmpleadoController extends Controller
 
     public function create()
     {
-        // Obtener usuarios que aún no están registrados como empleados
         $usuarios = User::whereDoesntHave('empleado')->get();
     
         return view('Empleados.Create', compact('usuarios'));
     }
     public function store(Request $request)
 {
-    // Validar los datos del formulario
     $validated = $request->validate([
         'id_usuario' => 'required|exists:users,id',
         'direccion' => 'required|string|max:255',
@@ -36,7 +33,6 @@ class EmpleadoController extends Controller
         'sucursal' => 'required|string|max:100',
     ]);
 
-    // Crear el empleado
     Empleado::create([
         'id_usuario' => $validated['id_usuario'],
         'direccion' => $validated['direccion'],
@@ -44,7 +40,6 @@ class EmpleadoController extends Controller
         'sucursal' => $validated['sucursal'],
     ]);
 
-    // Redirigir con un mensaje de éxito
     return redirect()->route('empleado.index')->with('success', 'Empleado registrado correctamente.');
 }
 
