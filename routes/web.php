@@ -65,4 +65,5 @@ Route::middleware('auth')->group(function () {
 
 /* Vista de prueba - Julissa*/
 Route::view('usuarios/', 'usuarios.index')->name('usuario.index');
+Route::view('registro', 'usuarios.singIn')->name('usuario.singIn');
 require __DIR__ . '/auth.php';
