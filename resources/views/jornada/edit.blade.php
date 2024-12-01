@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Editar Jornada</h1>
+    <h1 class="text-2xl font-bold">Editar Jornada</h1>
     <form action="{{ route('jornada.update', $jornada->id) }}" method="POST">
         @csrf
         @method('PUT')
