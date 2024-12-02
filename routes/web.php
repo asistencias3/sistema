@@ -67,4 +67,5 @@ Route::middleware('auth')->group(function () {
 Route::view('usuarios/', 'usuarios.index')->name('usuario.index');
 Route::view('sign_in', 'usuarios.signIn')->name('usuario.signIn');
 Route::view('login_prueba', 'usuarios.login')->name('usuario.loginPrueba');
+Route::view('forgot_password', 'usuarios.forgot_password')->name('usuario.forgotPassword');
 require __DIR__ . '/auth.php';
