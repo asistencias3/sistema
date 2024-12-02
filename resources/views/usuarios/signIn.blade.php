@@ -17,7 +17,7 @@
     <!-- Estilos adicionales -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #002826;
         }
 
         .navbar-brand {
@@ -35,13 +35,13 @@
     <div class="flex">
         {{-- Content --}}
         <div class="pt-3 pr-4 w-full">
-            <h1 class="pb-2 text-4xl text-center font-bold text-[#004643]">Bienvenido, crea una cuenta con nosotros
+            <h1 class="pb-2 text-4xl text-center font-bold text-[#fdfcfd]">Bienvenido, crea una cuenta con nosotros
             </h1>
-            <form action="#" method="POST" class="bg-[#f6f4f5] px-24 pt-4 mx-96 rounded">
+            <form action="#" method="POST" class="bg-[#f6f4f5] px-24 py-4 mx-96 rounded">
                 @csrf
 
                 <div>
-                    <p class="text-xl text-center font-semibold text-[#001e1d] pb-6">Crear cuenta</p>
+                    <p class="text-xl text-center font-semibold text-[#001e1d] pb-6">Sistema de gestión de asitencias</p>
                 </div>
 
                 <label for="name">Usuario</label>
@@ -64,13 +64,12 @@
                     class="appearance-none block w-full bg-[#e6edec] text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     required>
                 <button type="submit" class="w-full btn bg-[#004643] text-[#fdfcfd] font-semibold">Registrar usuario</button>
-                <p>¿Ya tienes una cuenta con nosotros? <a href="#" class="font-bold text-[#003c39] underline underline-offset-2">Inicia sesión</a></p>
+                <p>¿Ya tienes una cuenta con nosotros? <a href="{{route('usuario.loginPrueba')}}" class="font-bold text-[#003c39] underline underline-offset-2">Inicia sesión</a></p>
             </form>
-            <br>
             <!-- Footer -->
             <div class="bottom-0">
-                <footer class="mt-4 py-4 text-center">
-                    <p class="">&copy; {{ date('Y') }} Sistema de Gestión de Asistencias. Todos los derechos
+                <footer class="pt-4 text-center">
+                    <p class="text-[#fdfcfd]">&copy; {{ date('Y') }} Sistema de Gestión de Asistencias. Todos los derechos
                         reservados.</p>
                 </footer>
             </div>
