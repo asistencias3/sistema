@@ -7,12 +7,13 @@
                 <h1 class="text-2xl font-bold">Historial de Jornadas</h1>
             </div>
             <div class="object-left">
-                <a href="{{ route('jornada.create') }}" class="btn bg-[#004643] text-[#fdfcfd] font-semibold hover:">Nueva Jornada</a>
+                <a href="{{ route('jornada.create') }}" class="btn bg-[#004643] text-[#fdfcfd] font-semibold hover:">Nueva
+                    Jornada</a>
             </div>
         </div>
         <table class="table mt-3">
             <thead>
-                <tr>
+                <tr class="text-center">
                     <th>Fecha Inicio</th>
                     <th>Fecha Fin</th>
                     <th>Tipo</th>
@@ -24,7 +25,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
                 @foreach ($jornadas as $jornada)
                     <tr>
                         <td>{{ $jornada->fecha_inicio }}</td>
@@ -36,14 +37,19 @@
                         <td>{{ $jornada->fin_descanso }}</td>
                         <td>{{ $jornada->sucursal }}</td>
                         <td>
-                            <a href="{{ route('jornada.show', $jornada->id) }}" class="btn btn-info">Ver</a>
-                            <a href="{{ route('jornada.edit', $jornada->id) }}" class="btn btn-warning">Editar</a>
-                            <form action="{{ route('jornada.destroy', $jornada->id) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
+                            <div class="flex">
+                                <a href="{{ route('jornada.show', $jornada->id) }}"
+                                    class="btn bg-[#2e6765] text-[#fdfcfd] font-semibold m-2">Ver</a>
+                                <a href="{{ route('jornada.edit', $jornada->id) }}"
+                                    class="btn bg-yellow-600 text-[#fdfcfd] font-semibold m-2">Editar</a>
+                                <form action="{{ route('jornada.destroy', $jornada->id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="btn bg-red-500 text-[#fdfcfd] font-semibold m-2">Eliminar</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
