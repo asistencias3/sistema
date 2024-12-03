@@ -43,5 +43,21 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+        @if(session()->has('usuario'))
+<script>
+    // Obtén los datos del usuario desde la sesión de Laravel
+    const usuario = @json(session('usuario'));
+
+    // Asegúrate de que localStorage sea accesible
+    if (typeof localStorage !== "undefined") {
+        // Guarda los datos del usuario en localStorage
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+    } else {
+        console.warn("localStorage no está disponible en este navegador.");
+    }
+</script>
+@endif
+
+
     </form>
 </x-guest-layout>

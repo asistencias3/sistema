@@ -259,26 +259,25 @@ public function obtenerInasistencias(Request $request)
 
  public function registrarAsistencia(Request $request)
 {
-    // Validar los datos del request
     $validated = $request->validate([
-        'id_usuario' => 'required|exists:users,id',  // Verifica que el ID del usuario sea válido
-        'jornada_id' => 'required|exists:jornadas,id', // Verifica que el ID de la jornada sea válido
-        'fecha' => 'required|date',  // La fecha debe ser válida
-        'hora' => 'required|date_format:H:i',  // La hora debe estar en formato HH:mm
+        'id_usuario' => 'required|exists:users,id',
+        'jornada_id' => 'required|exists:jornadas,id',
+        'fecha' => 'required|date',
+        'hora_entrada' => 'required|date_format:H:i',
     ]);
 
-    // Crear la asistencia
+    // Crea el registro de asistencia
     $asistencia = Asistencia::create([
-        'id_empleado' => $validated['id_usuario'],  // Asignar el ID del usuario (empleado)
-        'id_jornada' => $validated['jornada_id'],  // Asignar el ID de la jornada
-        'fecha' => $validated['fecha'],  // Asignar la fecha de la asistencia
-        'hora_entrada' => $validated['hora'],  // Asignar la hora de entrada
+        'id_empleado' => $validated['id_usuario'],
+        'fecha' => $validated['fecha'],
+        'hora_entrada' => $validated['hora_entrada'],
     ]);
 
     return response()->json([
-        'message' => 'Asistencia registrada con éxito',  // Respuesta exitosa
-        'asistencia' => $asistencia  // Devolver los detalles de la asistencia registrada
-    ], 201);  // Código de estado HTTP 201: recurso creado
+        'success' => true,
+        'message' => 'Asistencia registrada con éxito',
+        'asistencia' => $asistencia
+    ]);
 }
 
 
