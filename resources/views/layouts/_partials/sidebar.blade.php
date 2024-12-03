@@ -42,7 +42,7 @@
             @slot('icon')
                 <ion-icon name="people-outline"></ion-icon>
             @endslot
-            @slot('reference', 'usuario.index')
+            @slot('reference', 'users.index')
             @slot('name', 'Usuarios')
         @endcomponent
 

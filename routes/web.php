@@ -5,6 +5,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\JornadaController;
+use App\Http\Controllers\UserController;
+
+Route::post('/registrar-asistencia', [AsistenciaController::class, 'registrarAsistencia']);
+
+
+Route::prefix('users')->name('users.')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('index'); // Listar usuarios
+    Route::get('/create', [UserController::class, 'create'])->name('create'); // Formulario de creación
+    Route::post('/', [UserController::class, 'store'])->name('store'); // Guardar usuario
+    Route::get('/{user}', [UserController::class, 'show'])->name('show'); // Mostrar un usuario
+    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit'); // Formulario de edición
+    Route::put('/{user}', [UserController::class, 'update'])->name('update'); // Actualizar usuario
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy'); // Eliminar usuario (soft delete si aplica)
+});
 
 
 Route::prefix('inasistencias')->group(function () {
@@ -63,8 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-/* Vista de prueba - Julissa*/
-Route::view('usuarios/', 'usuarios.index')->name('usuario.index');
+
 Route::view('sign_in', 'usuarios.signIn')->name('usuario.signIn');
 Route::view('login_prueba', 'usuarios.login')->name('usuario.loginPrueba');
 Route::view('forgot_password', 'usuarios.forgot_password')->name('usuario.forgotPassword');

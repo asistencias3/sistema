@@ -41,7 +41,6 @@ class JornadaController extends Controller
             'fin_descanso.before' => 'El fin del descanso debe ser antes de la hora de salida.',
         ]
     );
-
     $jornada = Jornada::create([
         'fecha_inicio' => $request->fecha_inicio,
         'fecha_fin' => $request->fecha_fin,
@@ -53,17 +52,41 @@ class JornadaController extends Controller
         'sucursal' => $request->sucursal,
     ]);
 
+    // Crear datos para el QR
+    $qrData = json_encode([
+        'jornada_id' => $jornada->id,
+        'fecha_inicio' => $jornada->fecha_inicio,
+        'hora_entrada' => $jornada->hora_entrada,
+        'hora_salida' => $jornada->hora_salida,
+        'sucursal' => $jornada->sucursal
+    ]);
+
+    // Generar el código QR
+    $jornada->update(['qr_code_data' => $qrData]);
+
     return redirect()->route('jornada.index')->with('success', 'Jornada creada con éxito!');
 }
 
 
 
-    public function show($id)
-    {
-        $jornada = Jornada::findOrFail($id); 
-        $qrCode = QrCode::size(200)->generate($jornada->qr_code_data); 
-        return view('jornada.show', compact('jornada', 'qrCode')); 
-    }
+public function show($id)
+{
+    $jornada = Jornada::findOrFail($id); 
+
+    // Generar el código QR con la información actual de la jornada
+    $qrData = json_encode([
+        'jornada_id' => $jornada->id,
+        'fecha_inicio' => $jornada->fecha_inicio,
+        'hora_entrada' => $jornada->hora_entrada,
+        'hora_salida' => $jornada->hora_salida,
+        'sucursal' => $jornada->sucursal
+    ]);
+
+    $qrCode = QrCode::size(200)->generate($qrData); 
+
+    return view('jornada.show', compact('jornada', 'qrCode')); 
+}
+
 
     public function edit($id)
     {
