@@ -266,7 +266,6 @@ public function obtenerInasistencias(Request $request)
         'hora_entrada' => 'required|date_format:H:i',
     ]);
 
-    // Crea el registro de asistencia
     $asistencia = Asistencia::create([
         'id_empleado' => $validated['id_usuario'],
         'fecha' => $validated['fecha'],

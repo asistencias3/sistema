@@ -35,7 +35,8 @@ class AuthenticatedSessionController extends Controller
         $usuario = Auth::user();
 
         // Guarda los datos del usuario en la sesión
-        $request->session()->put('usuario', [
+        $request->session()->flash('usuario', [
+            [
             'id' => $usuario->id,
             'nombre' => $usuario->nombre,
             'email' => $usuario->email,
