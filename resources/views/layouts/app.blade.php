@@ -35,7 +35,7 @@
     <div class="flex">
         {{-- Sidebar --}}
         <div class="flex-1">
-            @include('layouts._partials.sidebar')
+            @yield('sidebar')
         </div>
 
         {{-- Content --}}
