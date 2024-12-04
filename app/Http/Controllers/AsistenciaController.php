@@ -7,14 +7,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-
+use App\Mail\NotificacionInasistencia;
+use Illuminate\Support\Facades\Mail;
 class AsistenciaController extends Controller
 {
     public function index()
-    {
-        $asistencias = Asistencia::with('empleadoSucursal')->get();
-        return view('Asistencias.Index', compact('asistencias'));
-    }
+{
+    $asistencias = Asistencia::with('empleadoSucursal')
+        ->where('estado', 1) // Solo asistencias
+        ->get();
+
+    return view('Asistencias.Index', compact('asistencias'));
+}
 
     public function create()
 {
@@ -132,32 +136,32 @@ public function edit($id)
     
     
     public function generarPdf(Request $request)
-{
-    $asistencias = Asistencia::all(); // o cualquier consulta que estés realizando
-    $empleadoId = $request->empleadoId ?? null; // El ID del empleado, si es que existe
-    $rol = $request->input('rol');
-    $empleadoId = $request->input('id_empleado');
-
-    $query = Asistencia::query()->with('empleadoSucursal');
-
-    if (!empty($rol)) {
-        $query->whereHas('empleadoSucursal', function ($q) use ($rol) {
-            $q->where('rol', $rol);
-        });
+    {
+        $rol = $request->input('rol');
+        $empleadoId = $request->input('id_empleado');
+    
+        $query = Asistencia::query()
+            ->with('empleadoSucursal')
+            ->where('estado', 1); // Solo asistencias
+    
+        if (!empty($rol)) {
+            $query->whereHas('empleadoSucursal', function ($q) use ($rol) {
+                $q->where('rol', $rol);
+            });
+        }
+    
+        if (!empty($empleadoId)) {
+            $query->where('id_empleado', $empleadoId);
+        }
+    
+        $asistencias = $query->get();
+    
+        $pdf = Pdf::loadView('Asistencias.ReportePdf', compact('asistencias', 'rol', 'empleadoId'))
+            ->setPaper('a4', 'portrait');
+    
+        return $pdf->download('Reporte_Asistencias.pdf');
     }
-
-    if (!empty($empleadoId)) {
-        $query->where('id_empleado', $empleadoId);
-    }
-
-    $asistencias = $query->get();
-
-    // Cargar la nueva vista para el reporte
-    $pdf = Pdf::loadView('Asistencias.ReportePdf', compact('asistencias', 'rol', 'empleadoId'))
-               ->setPaper('a4', 'portrait');  // Se puede ajustar el tamaño y la orientación del papel si es necesario
-
-    return $pdf->download('Reporte_Asistencias.pdf');
-}
+    
 
 
 
@@ -224,28 +228,33 @@ public function obtenerInasistencias(Request $request)
      return view('Asistencias.Filtro_Pdf_Inasistencias', compact('roles'));
  }
 
-  public function generarPdfI(Request $request)
- {
-     $rol = $request->input('rol');
-     $empleadoId = $request->input('id_empleado');
+ public function generarPdfI(Request $request)
+{
+    $rol = $request->input('rol');
+    $empleadoId = $request->input('id_empleado');
 
-     $query = Asistencia::query()->with('empleadoSucursal');
+    $query = Asistencia::query()
+        ->with('empleadoSucursal')
+        ->where('estado', 0); // Solo inasistencias
 
-     if (!empty($rol)) {
-         $query->whereHas('empleadoSucursal', function ($q) use ($rol) {
-             $q->where('rol', $rol);
-         });
-     }
+    if (!empty($rol)) {
+        $query->whereHas('empleadoSucursal', function ($q) use ($rol) {
+            $q->where('rol', $rol);
+        });
+    }
 
-     if (!empty($empleadoId)) {
-         $query->where('id_empleado', $empleadoId);
-     }
+    if (!empty($empleadoId)) {
+        $query->where('id_empleado', $empleadoId);
+    }
 
-     $inasistencias = $query->get();
+    $inasistencias = $query->get();
 
-     $pdf = Pdf::loadView('Asistencias.Pdf_Inasistencias', compact('inasistencias'));
-     return $pdf->download('Reporte_Inasistencias.pdf');
- }
+    $pdf = Pdf::loadView('Asistencias.Pdf_Inasistencias', compact('inasistencias', 'rol', 'empleadoId'))
+        ->setPaper('a4', 'portrait');
+
+    return $pdf->download('Reporte_Inasistencias.pdf');
+}
+
 
  
  public function getEmpleadosPorRolI(Request $request)
@@ -261,7 +270,6 @@ public function obtenerInasistencias(Request $request)
 {
     $validated = $request->validate([
         'id_usuario' => 'required|exists:users,id',
-        'jornada_id' => 'required|exists:jornadas,id',
         'fecha' => 'required|date',
         'hora_entrada' => 'required|date_format:H:i',
     ]);
@@ -270,6 +278,7 @@ public function obtenerInasistencias(Request $request)
         'id_empleado' => $validated['id_usuario'],
         'fecha' => $validated['fecha'],
         'hora_entrada' => $validated['hora_entrada'],
+        'estado' => 1, // Siempre asistencia
     ]);
 
     return response()->json([
@@ -279,5 +288,18 @@ public function obtenerInasistencias(Request $request)
     ]);
 }
 
+public function notificarInasistencias()
+{
+    $inasistencias = Asistencia::where('estado', 0)->get();
 
+    foreach ($inasistencias as $inasistencia) {
+        $user = User::find($inasistencia->id_empleado);
+
+        if ($user) {
+            Mail::to($user->email)->send(new NotificacionInasistencia($user, $inasistencia));
+        }
+    }
+
+    return response()->json(['message' => 'Correos enviados para inasistencias detectadas.']);
+}
 }

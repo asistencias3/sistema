@@ -1,12 +1,22 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\JornadaController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotificacionInasistencia;
 
+Route::get('/correo', function () {
+    $nombreUsuario = 'Juan Pérez'; // Nombre de prueba
+    $fechaInasistencia = now()->format('Y-m-d'); // Fecha de prueba
+
+    Mail::to('2230412@upv.edu.mx')->send(new NotificacionInasistencia($nombreUsuario, $fechaInasistencia));
+
+    return 'Correo enviado correctamente';
+});
 Route::post('/registrar-asistencia', [AsistenciaController::class, 'registrarAsistencia']);
 
 
