@@ -1,5 +1,5 @@
 @section('sidebar')
-@include('layouts._partials.sidebar_empleado')
+@include('layouts._partials.sidebar_admin')
 
 @endsection
 
@@ -9,5 +9,5 @@
 
 
 @section('content')
-    <h1>Empleados</h1>
+    <h1>ADMIN</h1>
 @endsection

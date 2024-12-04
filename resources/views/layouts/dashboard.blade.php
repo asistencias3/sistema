@@ -1,6 +1,7 @@
 @section('sidebar')
+
 @include('layouts._partials.sidebar')
-    
+
 @endsection
 <x-app-layout>
     <x-slot name="header">
