@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificacionInasistencia;
+use App\Http\Controllers\UsDashboordsController;
+
 
 Route::get('/', function () {
     return view('welcome');
