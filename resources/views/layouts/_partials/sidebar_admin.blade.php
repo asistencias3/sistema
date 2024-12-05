@@ -8,7 +8,7 @@
     style="background: #004643; font-family: 'Kumbh Sans', sans-serif;">
 
     <div class="">
-        <a href="{{ route('index') }}">
+        <a href="{{ route('Administrador.dashboard') }}">
             <!-- Imagen centrada -->
             <div class="flex justify-center items-center mt-5">
                 <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" class="w-16 h-16 mt-2 mb-5">
@@ -26,7 +26,7 @@
             @slot('icon')
                 <ion-icon name="home-outline"></ion-icon>
             @endslot
-            @slot('reference', 'index')
+            @slot('reference', 'Administrador.dashboard')
             @slot('name', 'Inicio')
         @endcomponent
         {{-- 
