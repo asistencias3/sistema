@@ -1,3 +1,5 @@
+
+
 @extends('layouts.app')
 
 @section('content')
@@ -25,3 +27,7 @@
     </table>
 </div>
 @endsection
+@section('sidebar')
+@include('layouts._partials.sidebar_admin')
+@endsection
+

@@ -3,7 +3,6 @@
 
 @endsection
 
-@extends('layouts.user_view', ['headers'=>[]])
 
 @section('title', 'Index')
 
