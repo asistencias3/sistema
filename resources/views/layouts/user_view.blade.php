@@ -22,8 +22,7 @@
     <div class="flex">
         {{-- Sidebar --}}
         <div class="flex-none">
-            @include('layouts._partials.sidebar')
-        </div>
+@yield('sidebar')        </div>
         
         {{-- Content --}}
         <div class="pt-10 pr-4 sm:ml-64 w-full">

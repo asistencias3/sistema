@@ -37,30 +37,16 @@
         @slot('reference', 'permisos.index')
         @slot('name', 'Permisos')
         @endcomponent
-    --}}
+        
         @component('_components.boxSidebar ')
-            @slot('icon')
-                <ion-icon name="people-outline"></ion-icon>
-            @endslot
-            @slot('reference', 'users.index')
-            @slot('name', 'Usuarios')
-        @endcomponent
+        @slot('icon')
+        <ion-icon name="person-outline"></ion-icon>
+        @endslot
+        @slot('reference', 'usuarios.index')
+        @slot('name', 'Trabajadores')
+        @endcomponent --}}
 
-        @component('_components.boxSidebar ')
-            @slot('icon')
-                <ion-icon name="person-outline"></ion-icon>
-            @endslot
-            @slot('reference', 'empleado.index')
-            @slot('name', 'Empleados')
-        @endcomponent
-
-        @component('_components.boxSidebar ')
-            @slot('icon')
-                <ion-icon name="bag-outline"></ion-icon>
-            @endslot
-            @slot('reference', 'jornada.index')
-            @slot('name', 'Jornadas')
-        @endcomponent
+      
 
         @component('_components.boxSidebar ')
             @slot('icon')
@@ -76,13 +62,6 @@
             @endslot
             @slot('reference', 'inasistencias.view')
             @slot('name', 'Inasistencia')
-        @endcomponent
-        @component('_components.boxSidebar ')
-            @slot('icon')
-                <ion-icon name="qr-code-outline"></ion-icon>
-            @endslot
-            @slot('reference', 'empleado.index')
-            @slot('name', 'Validar Empleado')
         @endcomponent
 
         <li class="flex flex-1 items-center p-2 text-zinc-100 rounded-lg hover:bg-[#003230] group mb-1">
