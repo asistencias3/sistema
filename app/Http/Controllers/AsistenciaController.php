@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
+use App\Models\Jornada;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -266,27 +267,65 @@ public function obtenerInasistencias(Request $request)
  }
 
 
- public function registrarAsistencia(Request $request)
+ use Illuminate\Support\Facades\Log;
+
+public function registrarAsistencia(Request $request)
 {
-    $validated = $request->validate([
-        'id_usuario' => 'required|exists:users,id',
-        'fecha' => 'required|date',
-        'hora_entrada' => 'required|date_format:H:i',
+    Log::info('Iniciando el registro de asistencia.', $request->all());
+
+    $validatedData = $request->validate([
+        'id_empleado' => 'required|exists:users,id',
+        'jornada_id' => 'required|exists:jornadas,id',
+        'token' => 'required',
     ]);
 
+    Log::info('Datos validados correctamente.');
+
+    $jornada = Jornada::where('id', $request->jornada_id)
+                      ->where('qr_token', $request->token)
+                      ->first();
+
+    if (!$jornada) {
+        Log::warning('Jornada no válida o token ya utilizado.', ['jornada_id' => $request->jornada_id, 'token' => $request->token]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Jornada no válida o token ya utilizado.'
+        ], 400);
+    }
+
+    Log::info('Jornada encontrada.', ['jornada' => $jornada]);
+
+    $fechaHoy = now()->toDateString();
+    $asistenciaExistente = Asistencia::where('id_empleado', $request->id_empleado)
+        ->where('fecha', $fechaHoy)
+        ->first();
+
+    if ($asistenciaExistente) {
+        Log::info('Asistencia ya registrada para este día.', ['id_empleado' => $request->id_empleado, 'fecha' => $fechaHoy]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Ya has registrado tu asistencia para hoy.'
+        ], 400);
+    }
+
     $asistencia = Asistencia::create([
-        'id_empleado' => $validated['id_usuario'],
-        'fecha' => $validated['fecha'],
-        'hora_entrada' => $validated['hora_entrada'],
-        'estado' => 1, // Siempre asistencia
+        'id_empleado' => $request->id_empleado,
+        'fecha' => $fechaHoy,
+        'hora_entrada' => now(),
+        'estado' => 1,
     ]);
+
+    Log::info('Asistencia registrada exitosamente.', ['asistencia' => $asistencia]);
+
+    $jornada->update(['qr_token' => null]);
 
     return response()->json([
         'success' => true,
-        'message' => 'Asistencia registrada con éxito',
-        'asistencia' => $asistencia
+        'message' => 'Asistencia registrada exitosamente.'
     ]);
 }
+
+
 
 public function notificarInasistencias()
 {

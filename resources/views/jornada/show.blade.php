@@ -18,55 +18,51 @@
     <div class="my-4">
         <h4 class="text-xl font-semibold">QR de la Jornada</h4>
         <div class="my-3">
-            {!! QrCode::size(300)->generate(route('jornada.show', $jornada->id)) !!}
+            {!! QrCode::size(300)->generate(json_encode([
+                'jornada_id' => $jornada->id,
+                'token' => $jornada->qr_token,
+                'fecha' => $jornada->fecha_inicio,
+            ])) !!}
         </div>
     </div>
 
     <button id="escanearQr" class="btn btn-primary mt-3">Escanear QR y Registrar Asistencia</button>
-
     <a href="{{ route('jornada.index') }}" class="btn btn-secondary mt-3">Volver al Historial</a>
 </div>
 
 <script>
-    document.getElementById('escanearQr').addEventListener('click', async function () {
-        const usuario = JSON.parse(localStorage.getItem('usuario'));
-        if (!usuario) {
-            alert('No se encontró información del usuario. Inicie sesión nuevamente.');
-            return;
+ document.getElementById('escanearQr').addEventListener('click', async function () {
+    const payload = {
+        jornada_id: {{ $jornada->id }},
+        token: "{{ $jornada->qr_token }}",
+        id_empleado: {{ auth()->user()->id }}
+    };
+
+    console.log('Payload enviado:', payload);
+
+    try {
+        const response = await fetch('/registrar-asistencia', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        console.log('Respuesta recibida:', data);
+
+        if (data.success) {
+            alert('Asistencia registrada exitosamente.');
+        } else {
+            alert('Error al registrar asistencia: ' + data.message);
         }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        alert('Ocurrió un error al registrar la asistencia. Intente nuevamente.');
+    }
+});
 
-        const qrData = {
-            jornada_id: {{ $jornada->id }},
-            fecha: "{{ $jornada->fecha_inicio }}",
-            hora_entrada: "{{ $jornada->hora_entrada }}"
-        };
-
-        const payload = {
-            id_usuario: usuario.id,
-            ...qrData
-        };
-
-        try {
-            const response = await fetch('/registrar-asistencia', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                alert('Asistencia registrada exitosamente.');
-            } else {
-                alert('Error al registrar asistencia: ' + data.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Ocurrió un error al registrar la asistencia. Intente nuevamente.');
-        }
-    });
 </script>
-
 @endsection

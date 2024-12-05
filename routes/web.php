@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificacionInasistencia;
+use App\Http\Controllers\UsDashboordsController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -101,11 +103,12 @@ Route::group(['prefix' => 'Administrador'], function() {
     Route::get('/historial', function () {
         return view('historial_asistencias.Index');
     })->name('historial');
+    Route::post('/registrar-asistencia', [AsistenciaController::class, 'registrarAsistencia'])->name('registrar.asistencia');
 
 });//final de admin
 });//final del midleware de admin
 
-Route::post('/registrar-asistencia', [AsistenciaController::class, 'registrarAsistencia']);
+
 
 
 Route::middleware(['auth', 'role:3'])->group(function () {
