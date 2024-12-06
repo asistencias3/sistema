@@ -1,5 +1,5 @@
 @section('sidebar')
-@include('layouts._partials.sidebar_admin')
+@include('layouts._partials.sidebar_RH')
 @endsection
 @extends('layouts.app')
 
@@ -23,7 +23,7 @@
         button.addEventListener('click', function() {
             const asistenciaId = this.getAttribute('data-id');
 
-            fetch(`/Administrador/inasistencias/justificar/${asistenciaId}`, {
+            fetch(`/RH/inasistencias/justificar/${asistenciaId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

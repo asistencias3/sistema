@@ -69,7 +69,18 @@
             @slot('reference', 'inasistencias.view')
             @slot('name', 'Inasistencia')
         @endcomponent
+        @component('_components.boxSidebar ')
+        @slot('icon')
+                <ion-icon name="checkbox-outline"></ion-icon>
+            @endslot
+        @slot('reference', 'inasistencias.indexRH')
+        @slot('name', 'Justificar inasistencias')
+        @endcomponent
 
+        @component('_components.boxSidebar ')
+        @slot('icon')
+            <ion-icon name="qr-code-outline"></ion-icon>
+        @endslot
 
         <li class="flex flex-1 items-center p-2 text-zinc-100 rounded-lg hover:bg-[#003230] group mb-1">
             <div class="pr-3.5"><ion-icon name="log-out-outline"></ion-icon></div>
