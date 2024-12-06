@@ -30,43 +30,27 @@
         </div>
     </div>
 
-    <button id="escanearQr" class="btn btn-primary mt-3">Escanear QR y Registrar Asistencia</button>
+    <form action="{{ route('asistencia.registrar') }}" method="POST">
+    @csrf
+    <input type="hidden" name="jornada_id" value="{{ $jornada->id }}">
+
+    <!-- Campos ocultos con los valores de la sesión -->
+    <input type="hidden" name="estado" value="1"> <!-- Estado de la asistencia, presuponiendo que es 1 para presente -->
+    <input type="hidden" name="fecha" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"> <!-- Fecha actual -->
+    <input type="hidden" name="hora_entrada" value="{{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}"> <!-- Hora de entrada actual -->
+    <input type="hidden" name="hora_salida" value=""> <!-- Hora de salida, inicialmente vacía -->
+
+    <!-- Botón de envío -->
+    <button type="submit" class="btn btn-success">Registrar Asistencia</button>
+</form>
+
+</form>
+
+</form>
+
+</form>
+
     <a href="{{ route('jornada.index') }}" class="btn btn-secondary mt-3">Volver al Historial</a>
 </div>
 
-<script>
- document.getElementById('escanearQr').addEventListener('click', async function () {
-    const payload = {
-        jornada_id: {{ $jornada->id }},
-        token: "{{ $jornada->qr_token }}",
-        id_empleado: {{ auth()->user()->id }}
-    };
-
-    console.log('Payload enviado:', payload);
-
-    try {
-        const response = await fetch('/registrar-asistencia', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-        console.log('Respuesta recibida:', data);
-
-        if (data.success) {
-            alert('Asistencia registrada exitosamente.');
-        } else {
-            alert('Error al registrar asistencia: ' + data.message);
-        }
-    } catch (error) {
-        console.error('Error en la solicitud:', error);
-        alert('Ocurrió un error al registrar la asistencia. Intente nuevamente.');
-    }
-});
-
-</script>
 @endsection

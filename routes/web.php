@@ -103,7 +103,9 @@ Route::group(['prefix' => 'Administrador'], function() {
     Route::get('/historial', function () {
         return view('historial_asistencias.Index');
     })->name('historial');
-    Route::post('/registrar-asistencia', [AsistenciaController::class, 'registrarAsistencia'])->name('registrar.asistencia');
+    
+Route::post('/asistencia/registrar', [AsistenciaController::class, 'registrar'])->name('asistencia.registrar');
+
 
 });//final de admin
 });//final del midleware de admin

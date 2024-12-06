@@ -27,25 +27,26 @@ class AuthenticatedSessionController extends Controller
     {
         // Autentica al usuario
         $request->authenticate();
-
+    
         // Regenera la sesión para prevenir ataques de fijación de sesión
         $request->session()->regenerate();
-
+    
         // Obtiene al usuario autenticado
         $usuario = Auth::user();
-
-        // Guarda los datos del usuario en la sesión
-        $request->session()->flash('usuario', 
-            [
-            'id' => $usuario->id,
-            'nombre' => $usuario->nombre,
-            'email' => $usuario->email,
-            'rol' => $usuario->rol
+    
+        // Guarda los datos del usuario en la sesión (esto estará disponible durante toda la sesión)
+        session([
+            'usuario_id' => auth()->user()->id,
+            'usuario_nombre' => auth()->user()->name,
+            'usuario_email' => auth()->user()->email,
+            'usuario_rol' => auth()->user()->rol, // Asegúrate de que este campo existe en tu modelo User
         ]);
-
+        
         // Redirige a la página deseada después del login
         return redirect()->intended(RouteServiceProvider::HOME);
     }
+    
+    
 
     /**
      * Destroy an authenticated session.

@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use App\Mail\NotificacionInasistencia;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 class AsistenciaController extends Controller
 {
     public function index()
@@ -267,66 +268,6 @@ public function obtenerInasistencias(Request $request)
  }
 
 
- use Illuminate\Support\Facades\Log;
-
-public function registrarAsistencia(Request $request)
-{
-    Log::info('Iniciando el registro de asistencia.', $request->all());
-
-    $validatedData = $request->validate([
-        'id_empleado' => 'required|exists:users,id',
-        'jornada_id' => 'required|exists:jornadas,id',
-        'token' => 'required',
-    ]);
-
-    Log::info('Datos validados correctamente.');
-
-    $jornada = Jornada::where('id', $request->jornada_id)
-                      ->where('qr_token', $request->token)
-                      ->first();
-
-    if (!$jornada) {
-        Log::warning('Jornada no válida o token ya utilizado.', ['jornada_id' => $request->jornada_id, 'token' => $request->token]);
-        return response()->json([
-            'success' => false,
-            'message' => 'Jornada no válida o token ya utilizado.'
-        ], 400);
-    }
-
-    Log::info('Jornada encontrada.', ['jornada' => $jornada]);
-
-    $fechaHoy = now()->toDateString();
-    $asistenciaExistente = Asistencia::where('id_empleado', $request->id_empleado)
-        ->where('fecha', $fechaHoy)
-        ->first();
-
-    if ($asistenciaExistente) {
-        Log::info('Asistencia ya registrada para este día.', ['id_empleado' => $request->id_empleado, 'fecha' => $fechaHoy]);
-        return response()->json([
-            'success' => false,
-            'message' => 'Ya has registrado tu asistencia para hoy.'
-        ], 400);
-    }
-
-    $asistencia = Asistencia::create([
-        'id_empleado' => $request->id_empleado,
-        'fecha' => $fechaHoy,
-        'hora_entrada' => now(),
-        'estado' => 1,
-    ]);
-
-    Log::info('Asistencia registrada exitosamente.', ['asistencia' => $asistencia]);
-
-    $jornada->update(['qr_token' => null]);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Asistencia registrada exitosamente.'
-    ]);
-}
-
-
-
 public function notificarInasistencias()
 {
     $inasistencias = Asistencia::where('estado', 0)->get();
@@ -341,4 +282,44 @@ public function notificarInasistencias()
 
     return response()->json(['message' => 'Correos enviados para inasistencias detectadas.']);
 }
+
+public function registrar(Request $request)
+{
+    // Obtener el usuario desde la sesión
+    $usuario = User::find(session('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'));
+
+    if (!$usuario) {
+        return redirect()->route('login')->with('error', 'Debes estar logueado.');
+    }
+
+    // Obtener la jornada desde el formulario
+    $jornada = Jornada::findOrFail($request->input('jornada_id'));
+
+    // Formatear las horas de entrada y salida de la jornada
+    $horaEntrada = Carbon::parse($jornada->hora_entrada)->format('Y-m-d H:i:s');
+    $horaSalida = Carbon::parse($jornada->hora_salida)->format('Y-m-d H:i:s');
+    
+    // Asignar hora_segunda_entrada = hora_salida de jornada
+    $horaSegundaEntrada = $horaSalida;
+
+    // Asignar hora_segunda_salida = hora_entrada de jornada
+    $horaSegundaSalida = $horaEntrada;
+
+    // Crear y guardar la asistencia
+    Asistencia::create([
+        'estado' => 1, // Estado: presente
+        'id_empleado' => $usuario->id,
+        'fecha' => now()->format('Y-m-d'),
+        'hora_entrada' => $horaEntrada, // Hora de entrada de la jornada
+        'hora_salida' => $horaSalida, // Hora de salida de la jornada
+        'hora_segunda_entrada' => $horaSegundaEntrada, // Hora segunda entrada = hora salida de jornada
+        'hora_segunda_salida' => $horaSegundaSalida, // Hora segunda salida = hora entrada de jornada
+    ]);
+
+    return redirect()->route('asistencias.index', $jornada->id)
+        ->with('success', 'Asistencia registrada exitosamente.');
+}
+
+
+
 }
