@@ -22,6 +22,17 @@ class AsistenciaController extends Controller
     return view('Asistencias.Index', compact('asistencias'));
 }
 
+public function inasistencias()
+{
+    // Traer todas las inasistencias (estado = 0)
+    $inasistencias = Asistencia::with('empleadoSucursal')
+        ->where('estado', 0) // Solo inasistencias
+        ->get();
+
+    return view('inasistencias.index', compact('inasistencias'));
+}
+
+
     public function create()
 {
     $empleados = User::all();
@@ -218,6 +229,42 @@ public function obtenerInasistencias(Request $request)
     return response()->json($inasistencias);
 }
 
+public function showI($id)
+{
+    $inasistencias = Asistencia::where('user_id', $id)->get();
+
+    return view('inasistencias.show', compact('inasistencias'));
+}
+
+public function justificarInasistencia(Request $request)
+{
+    // Agrega un log para verificar los datos recibidos
+    Log::info('Datos recibidos:', $request->all());
+
+    $request->validate([
+        'asistencia_id' => 'required|exists:asistencias,id',
+    ]);
+
+    $asistenciaId = $request->input('asistencia_id');
+    $asistencia = Asistencia::findOrFail($asistenciaId);
+
+    if ($asistencia->estado === 1) {
+        return response()->json([
+            'message' => 'La asistencia ya está justificada.',
+        ], 400);
+    }
+
+    $asistencia->estado = 1;
+    $asistencia->save();
+
+    return response()->json([
+        'message' => 'La inasistencia ha sido justificada con éxito.',
+        'asistencia' => $asistencia,
+    ]);
+}
+
+
+
  
  public function filtroPdfI()
  {
@@ -285,35 +332,35 @@ public function notificarInasistencias()
 
 public function registrar(Request $request)
 {
-    // Obtener el usuario desde la sesión
+    
     $usuario = User::find(session('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'));
 
     if (!$usuario) {
         return redirect()->route('login')->with('error', 'Debes estar logueado.');
     }
 
-    // Obtener la jornada desde el formulario
+    
     $jornada = Jornada::findOrFail($request->input('jornada_id'));
 
-    // Formatear las horas de entrada y salida de la jornada
+    
     $horaEntrada = Carbon::parse($jornada->hora_entrada)->format('Y-m-d H:i:s');
     $horaSalida = Carbon::parse($jornada->hora_salida)->format('Y-m-d H:i:s');
     
-    // Asignar hora_segunda_entrada = hora_salida de jornada
+    
     $horaSegundaEntrada = $horaSalida;
 
-    // Asignar hora_segunda_salida = hora_entrada de jornada
+   
     $horaSegundaSalida = $horaEntrada;
 
-    // Crear y guardar la asistencia
+    
     Asistencia::create([
-        'estado' => 1, // Estado: presente
+        'estado' => 1, 
         'id_empleado' => $usuario->id,
         'fecha' => now()->format('Y-m-d'),
-        'hora_entrada' => $horaEntrada, // Hora de entrada de la jornada
-        'hora_salida' => $horaSalida, // Hora de salida de la jornada
-        'hora_segunda_entrada' => $horaSegundaEntrada, // Hora segunda entrada = hora salida de jornada
-        'hora_segunda_salida' => $horaSegundaSalida, // Hora segunda salida = hora entrada de jornada
+        'hora_entrada' => $horaEntrada, 
+        'hora_salida' => $horaSalida, 
+        'hora_segunda_entrada' => $horaSegundaEntrada, 
+        'hora_segunda_salida' => $horaSegundaSalida, 
     ]);
 
     return redirect()->route('asistencias.index', $jornada->id)

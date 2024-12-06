@@ -106,6 +106,8 @@
 
                     resultadosDiv.appendChild(item);
                 });
+
+                
             } else {
                 const noResults = document.createElement('div');
                 noResults.classList.add('list-group-item', 'text-danger');

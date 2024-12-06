@@ -86,6 +86,13 @@
         @endcomponent
         @component('_components.boxSidebar ')
         @slot('icon')
+            <ion-icon name="checkbox-outline"></ion-icon>
+        @endslot
+        @slot('reference', 'inasistencias.index')
+        @slot('name', 'Justificar inasistencias')
+        @endcomponent
+        @component('_components.boxSidebar ')
+        @slot('icon')
             <ion-icon name="qr-code-outline"></ion-icon>
         @endslot
         @slot('reference', 'empleado.index')

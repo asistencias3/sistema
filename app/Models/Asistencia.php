@@ -28,5 +28,10 @@ class Asistencia extends Model
     return $this->belongsTo(Jornada::class);
 }
 
+public function asistencias()
+{
+    return $this->hasMany(Asistencia::class);
+}
+
 }
 

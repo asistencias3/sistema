@@ -56,6 +56,8 @@ Route::group(['prefix' => 'Administrador'], function() {
         Route::get('/filtro-pdf', [AsistenciaController::class, 'filtroPdfI'])->name('inasistencias.filtroPdf');
         Route::get('/generar-pdf', [AsistenciaController::class, 'generarPdfI'])->name('inasistencias.generarPdf');
         Route::post('/get-empleados', [AsistenciaController::class, 'getEmpleadosPorRolI'])->name('inasistencias.getEmpleados');
+
+
     });
 
 
@@ -64,6 +66,11 @@ Route::group(['prefix' => 'Administrador'], function() {
     Route::post('/get-empleados', [AsistenciaController::class, 'getEmpleadosPorRol'])->name('get.empleados');
     Route::get('/inasistencias', [AsistenciaController::class, 'mostrarInasistenciasView'])->name('inasistencias.view');
     Route::post('/inasistencias', [AsistenciaController::class, 'obtenerInasistencias'])->name('inasistencias.post');
+    Route::get('/inasistencias/justificar', [AsistenciaController::class, 'inasistencias'])->name('inasistencias.index');
+    Route::post('/inasistencias/justificar/{asistenciaId}', [AsistenciaController::class, 'justificarInasistencia'])->name('inasistencias.justificar');
+    
+
+
 
 
     Route::prefix('asistencias')->name('asistencias.')->group(function () {
