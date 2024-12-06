@@ -52,7 +52,7 @@
             @slot('icon')
                 <ion-icon name="checkbox-outline"></ion-icon>
             @endslot
-            @slot('reference', 'asistencias.index')
+            @slot('reference', 'empleado.asistencia')
             @slot('name', 'Asistencia')
         @endcomponent
 
@@ -60,7 +60,7 @@
             @slot('icon')
                 <ion-icon name="checkbox-outline"></ion-icon>
             @endslot
-            @slot('reference', 'inasistencias.view')
+            @slot('reference', 'empleado.inasistencia')
             @slot('name', 'Inasistencia')
         @endcomponent
 

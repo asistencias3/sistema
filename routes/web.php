@@ -116,7 +116,13 @@ Route::middleware(['auth', 'role:3'])->group(function () {
         Route::get('/dashboard', function () {
             return view('Empleados.dashboard');
         })->name('Empleados.dashboard');
+    Route::get('/asistencias', [EmpleadoController::class, 'buscarAsistenciasEmp'])->name('empleado.asistencia');
+    Route::get('/inasistencias', [EmpleadoController::class, 'buscarInAsistenciasEmp'])->name('empleado.inasistencia');
+
+    
 });
+
+
 });
 
 

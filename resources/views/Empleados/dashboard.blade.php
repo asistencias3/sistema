@@ -102,6 +102,7 @@
         <div class="row">
             <!-- Card: Asistencias -->
             <div class="col-md-6">
+                <a href="{{ route('empleado.asistencia') }}" class="card-link">
                 <div class="card card-asistencias shadow-lg">
                     <div class="card-body">
                         <h2 class="card-title">Asistencias</h2>
@@ -111,6 +112,8 @@
 
             <!-- Card: Inasistencias -->
             <div class="col-md-6">
+                <a href="{{ route('empleado.inasistencia') }}" class="card-link">
+
                 <div class="card card-inasistencias shadow-lg">
                     <div class="card-body">
                         <h2 class="card-title">Inasistencias</h2>

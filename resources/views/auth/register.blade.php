@@ -91,7 +91,6 @@
                 <div class="mt-4">
                     <label for="rol" class="block text-[#001e1d] font-semibold">Rol</label>
                     <select id="rol" name="rol" class="block mt-1 w-full bg-[#e6edec] text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" required>
-                        <option value="1">Administrator</option>
                         <option value="2">Human Resources</option>
                         <option value="3" selected>Employee</option>
                     </select>

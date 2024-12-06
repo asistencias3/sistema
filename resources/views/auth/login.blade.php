@@ -72,9 +72,6 @@
                         @enderror
                     </div>
 
-                    <a href="{{ route('password.request') }}"
-                        class="font-bold text-[#e6edec] underline underline-offset-2 pb-2">¿Olvidaste tu contraseña?</a>
-
                     <button type="submit" class="mt-3 w-full btn bg-[#2e6765] text-[#fdfcfd] font-semibold hover:text-[#fdfcfd] bg-[#004643]">Iniciar sesión</button>
 
                     <p class="text-[#fdfcfd]">¿No tienes una cuenta con nosotros? <a href="{{ route('register') }}"
