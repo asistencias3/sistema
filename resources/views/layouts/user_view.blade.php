@@ -4,6 +4,7 @@
         background-color: #ffffff;
     }
 </style>
+@yield('style')
 <html lang="es">
 
 <head>

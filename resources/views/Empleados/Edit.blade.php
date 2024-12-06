@@ -1,4 +1,8 @@
 @extends('layouts.app')
+@section('sidebar')
+@include('layouts._partials.sidebar_admin')
+
+@endsection
 
 @section('content')
 <div class="container">

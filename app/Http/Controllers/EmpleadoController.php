@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empleado;
+use App\Models\Asistencia;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,45 @@ class EmpleadoController extends Controller
         return view('Empleados.Index', compact('usuarios'));
     }
     
+    public function buscarAsistenciasEmp(Request $request)
+{
+    $user = auth()->user(); // Obtener el usuario autenticado
+    $rol = $user->role; // Obtener el rol del usuario
+    $empleado = $user->empleado; // Obtener el empleado relacionado al usuario
+
+    // Si no existe el empleado, muestra un mensaje de error
+    if (!$empleado) {
+        return redirect()->route('Empleados.dashboard')->with('error', 'Empleado no encontrado.');
+    }
+
+    // Buscar las asistencias del empleado autenticado
+    $asistencias = Asistencia::where('id_empleado', $empleado->id) // Filtra las asistencias por ID de empleado
+                             ->where('estado', 1) // Solo las asistencias con estado 1
+                             ->with('empleadoSucursal') // Incluir la relación con empleadoSucursal
+                             ->get();
+
+    return view('Empleados.asistencias', compact('asistencias', 'rol', 'empleado'));
+}
+public function buscarInAsistenciasEmp(Request $request)
+{
+    $user = auth()->user(); // Obtener el usuario autenticado
+    $rol = $user->role; // Obtener el rol del usuario
+    $empleado = $user->empleado; // Obtener el empleado relacionado al usuario
+
+    // Si no existe el empleado, muestra un mensaje de error
+    if (!$empleado) {
+        return redirect()->route('Empleados.dashboard')->with('error', 'Empleado no encontrado.');
+    }
+
+    // Buscar las asistencias del empleado autenticado
+    $asistencias = Asistencia::where('id_empleado', $empleado->id) // Filtra las asistencias por ID de empleado
+                             ->where('estado', 0) // Solo las asistencias con estado 1
+                             ->with('empleadoSucursal') // Incluir la relación con empleadoSucursal
+                             ->get();
+
+    return view('Empleados.inasistencias', compact('asistencias', 'rol', 'empleado'));
+}
+
     
 
 
