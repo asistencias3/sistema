@@ -48,22 +48,7 @@
 
       
 
-        @component('_components.boxSidebar ')
-            @slot('icon')
-                <ion-icon name="checkbox-outline"></ion-icon>
-            @endslot
-            @slot('reference', 'empleado.asistencia')
-            @slot('name', 'Asistencia')
-        @endcomponent
-
-        @component('_components.boxSidebar ')
-            @slot('icon')
-                <ion-icon name="checkbox-outline"></ion-icon>
-            @endslot
-            @slot('reference', 'empleado.inasistencia')
-            @slot('name', 'Inasistencia')
-        @endcomponent
-
+    
         <li class="flex flex-1 items-center p-2 text-zinc-100 rounded-lg hover:bg-[#003230] group mb-1">
             <div class="pr-3.5"><ion-icon name="log-out-outline"></ion-icon></div>
             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
