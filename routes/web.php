@@ -129,7 +129,9 @@ Route::middleware(['auth', 'role:3'])->group(function () {
             return view('Empleados.dashboard');
         })->name('Empleados.dashboard');
     Route::get('/asistencias', [EmpleadoController::class, 'buscarAsistenciasEmp'])->name('empleado.asistencia');
+    Route::get('/asistenciasPDF', [EmpleadoController::class, 'generarPdfAsistencias'])->name('empleado.asistencia.pdf');
     Route::get('/inasistencias', [EmpleadoController::class, 'buscarInAsistenciasEmp'])->name('empleado.inasistencia');
+    Route::get('/inasistenciasPDF', [EmpleadoController::class, 'generarPdfInasistencias'])->name('empleado.inasistencia.pdf');
 
     
     

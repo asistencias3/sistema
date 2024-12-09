@@ -6,6 +6,8 @@
 
 @section('content')
 <div class="content-container">
+    <a href="{{ route('empleado.asistencia.pdf') }}" class="btn btn-primary">Descargar PDF</a>
+
     <div class="header">
         <h1>Reporte de Asistencias</h1>
     </div>

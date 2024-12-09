@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Empleado;
 use App\Models\Asistencia;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Http\Request;
 
 class EmpleadoController extends Controller
@@ -18,27 +20,26 @@ class EmpleadoController extends Controller
     
     public function buscarAsistenciasEmp(Request $request)
 {
-    $user = auth()->user(); // Obtener el usuario autenticado
-    $rol = $user->role; // Obtener el rol del usuario
-    $empleado = $user->empleado; // Obtener el empleado relacionado al usuario
+    $user = auth()->user();
+    $rol = $user->role;
+    $empleado = $user->empleado; 
 
-    // Si no existe el empleado, muestra un mensaje de error
     if (!$empleado) {
         return redirect()->route('Empleados.dashboard')->with('error', 'Empleado no encontrado.');
     }
 
     // Buscar las asistencias del empleado autenticado
     $asistencias = Asistencia::where('id_empleado', $empleado->id) // Filtra las asistencias por ID de empleado
-                             ->where('estado', 1) // Solo las asistencias con estado 1
-                             ->with('empleadoSucursal') // Incluir la relación con empleadoSucursal
+                             ->where('estado', 1) 
+                             ->with('empleadoSucursal') 
                              ->get();
 
     return view('Empleados.asistencias', compact('asistencias', 'rol', 'empleado'));
 }
 public function buscarInAsistenciasEmp(Request $request)
 {
-    $user = auth()->user(); // Obtener el usuario autenticado
-    $rol = $user->role; // Obtener el rol del usuario
+    $user = auth()->user();
+    $rol = $user->role;
     $empleado = $user->empleado; // Obtener el empleado relacionado al usuario
 
     // Si no existe el empleado, muestra un mensaje de error
@@ -46,10 +47,9 @@ public function buscarInAsistenciasEmp(Request $request)
         return redirect()->route('Empleados.dashboard')->with('error', 'Empleado no encontrado.');
     }
 
-    // Buscar las asistencias del empleado autenticado
-    $asistencias = Asistencia::where('id_empleado', $empleado->id) // Filtra las asistencias por ID de empleado
-                             ->where('estado', 0) // Solo las asistencias con estado 1
-                             ->with('empleadoSucursal') // Incluir la relación con empleadoSucursal
+    $asistencias = Asistencia::where('id_empleado', $empleado->id) 
+                             ->where('estado', 0) 
+                             ->with('empleadoSucursal') 
                              ->get();
 
     return view('Empleados.inasistencias', compact('asistencias', 'rol', 'empleado'));
@@ -84,52 +84,38 @@ public function buscarInAsistenciasEmp(Request $request)
 }
 
     
-/*
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'id_empleado_sucursal' => 'required|integer',
-            'fecha' => 'required|date',
-            'hora_entrada' => 'required|date_format:H:i',
-            'hora_salida' => 'required|date_format:H:i',
-            'hora_segunda_entrada' => 'nullable|date_format:H:i',
-            'hora_segunda_salida' => 'nullable|date_format:H:i',
-        ]);
+public function generarPdfAsistencias()
+{
+    $user = auth()->user();
+    $empleado = $user->empleado;
 
-        Asistencia::create($validated);
-
-        return redirect()->route('asistencias.index')->with('success', 'Asistencia creada con éxito.');
+    if (!$empleado) {
+        return redirect()->route('Empleados.dashboard')->with('error', 'Empleado no encontrado.');
     }
 
-    public function edit($id)
-    {
-        $asistencia = Asistencia::findOrFail($id);
-        return view('Asistencias.Edit', compact('asistencia'));
-    }
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'id_empleado_sucursal' => 'required|integer',
-            'fecha' => 'required|date',
-            'hora_entrada' => 'nullable|date_format:H:i',
-            'hora_salida' => 'nullable|date_format:H:i',
-            'hora_segunda_entrada' => 'nullable|date_format:H:i',
-            'hora_segunda_salida' => 'nullable|date_format:H:i',
-        ]);
+    $asistencias = Asistencia::where('id_empleado', $empleado->id)
+                             ->where('estado', 1)
+                             ->get();
 
-        $asistencia = Asistencia::findOrFail($id);
-        $asistencia->update($validated);
+    $pdf = Pdf::loadView('Empleados.PDFasistencias', compact('asistencias'));
+    return $pdf->download('asistencias.pdf');
+}
 
-        return redirect()->route('asistencias.index')->with('success', 'Asistencia actualizada con éxito.');
+public function generarPdfInasistencias()
+{
+    $user = auth()->user();
+    $empleado = $user->empleado;
+
+    if (!$empleado) {
+        return redirect()->route('Empleados.dashboard')->with('error', 'Empleado no encontrado.');
     }
 
-    public function destroy($id)
-    {
-        $asistencia = Asistencia::findOrFail($id);
-        $asistencia->delete();
+    $inasistencias = Asistencia::where('id_empleado', $empleado->id)
+                                ->where('estado', 0)
+                                ->get();
 
-        return redirect()->route('asistencias.index')->with('success', 'Asistencia eliminada con éxito.');
-    }
-*/
+    $pdf = Pdf::loadView('Empleados.PDFinasistencias', compact('inasistencias'));
+    return $pdf->download('inasistencias.pdf');
+}
 
 }
