@@ -55,6 +55,27 @@ public function buscarInAsistenciasEmp(Request $request)
     return view('Empleados.inasistencias', compact('asistencias', 'rol', 'empleado'));
 }
 
+public function showJornadas($id){
+    $jornada = Jornada::findOrFail($id); 
+
+    $qrData = json_encode([
+        'jornada_id' => $jornada->id,
+        'fecha_inicio' => $jornada->fecha_inicio,
+        'hora_entrada' => $jornada->hora_entrada,
+        'hora_salida' => $jornada->hora_salida,
+        'sucursal' => $jornada->sucursal
+    ]);
+
+    $qrCode = QrCode::size(200)->generate($qrData); 
+
+    return view('empleado.showJornadas', compact('jornada', 'qrCode')); 
+}
+
+public function Jornadas()
+    {
+        $jornadas = Jornada::all(); 
+        return view('empleado.jornadas', compact('jornadas')); 
+    }
     
 
 
