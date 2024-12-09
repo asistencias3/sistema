@@ -63,11 +63,14 @@
             @slot('reference', 'empleado.inasistencia')
             @slot('name', 'Inasistencia')
         @endcomponent
+        <!--
+            esto es aparte para el qr
+        -->
         @component('_components.boxSidebar ')
             @slot('icon')
                 <ion-icon name="checkbox-outline"></ion-icon>
             @endslot
-            @slot('reference', 'empleado.showJornadas')
+            @slot('reference', 'empleado.jornadas')
             @slot('name', 'Jornadas')
         @endcomponent
 

@@ -132,8 +132,9 @@ Route::middleware(['auth', 'role:3'])->group(function () {
     Route::get('/asistenciasPDF', [EmpleadoController::class, 'generarPdfAsistencias'])->name('empleado.asistencia.pdf');
     Route::get('/inasistencias', [EmpleadoController::class, 'buscarInAsistenciasEmp'])->name('empleado.inasistencia');
     Route::get('/inasistenciasPDF', [EmpleadoController::class, 'generarPdfInasistencias'])->name('empleado.inasistencia.pdf');
-
-    
+    Route::get('/empleado/jornadas/{id}', [EmpleadoController::class, 'showJornadas'])->name('empleado.jornadas.show');
+    Route::get('/indexJornadas', [EmpleadoController::class, 'Jornadas'])->name('empleado.jornadas');
+    Route::post('/empleado/registrar', [EmpleadoController::class, 'registrar'])->name('empleado.registrar');
     
 });
 });
