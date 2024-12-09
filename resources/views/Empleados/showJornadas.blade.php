@@ -19,8 +19,38 @@
         <p><strong>Sucursal:</strong> {{ $jornada->sucursal }}</p>
     </div>
 
+    <div class="my-4">
+        <h4 class="text-xl font-semibold">QR de la Jornada</h4>
+        <div class="my-3">
+            {!! QrCode::size(300)->generate(json_encode([
+                'jornada_id' => $jornada->id,
+                'token' => $jornada->qr_token,
+                'fecha' => $jornada->fecha_inicio,
+            ])) !!}
+        </div>
+    </div>
 
-    <a href="{{ route('empleado.jornadas') }}" class="btn btn-secondary mt-3">Volver al Historial</a>
+    <form action="{{ route('empleado.registrar') }}" method="POST">
+    @csrf
+<!-- Campos ocultos para la asistencia -->
+<input type="hidden" name="jornada_id" value="{{ $jornada->id }}">
+<input type="hidden" name="estado" value="1">
+<input type="hidden" name="fecha" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+<input type="hidden" name="hora_entrada" value="{{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}">
+<input type="hidden" name="hora_salida" value="">
+
+
+    <!-- Botón de envío -->
+    <button type="submit" class="btn btn-success">Registrar Asistencia</button>
+</form>
+
+</form>
+
+</form>
+
+</form>
+
+    <a href="{{ route('empleado.asistencia') }}" class="btn btn-secondary mt-3">Volver al Historial</a>
 </div>
 
 @endsection
