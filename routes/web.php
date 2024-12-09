@@ -3,11 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\AsistenciaEController;
-use App\Http\Controllers\AsistenciaRHController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\JornadaController;
 use App\Http\Controllers\UsDashboordsController;
 use App\Http\Controllers\RHController;
+use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
