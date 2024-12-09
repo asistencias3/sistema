@@ -1,3 +1,7 @@
+@section('sidebar')
+@include('layouts._partials.sidebar_admin')
+
+@endsection
 @extends('layouts.app') 
 
 @section('content')
@@ -102,6 +106,8 @@
 
                     resultadosDiv.appendChild(item);
                 });
+
+                
             } else {
                 const noResults = document.createElement('div');
                 noResults.classList.add('list-group-item', 'text-danger');

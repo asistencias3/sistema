@@ -8,7 +8,7 @@
     style="background: #004643; font-family: 'Kumbh Sans', sans-serif;">
 
     <div class="">
-        <a href="{{ route('index') }}">
+        <a href="{{ route('RH.dashboard') }}">
             <!-- Imagen centrada -->
             <div class="flex justify-center items-center mt-5">
                 <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" class="w-16 h-16 mt-2 mb-5">
@@ -26,7 +26,7 @@
             @slot('icon')
                 <ion-icon name="home-outline"></ion-icon>
             @endslot
-            @slot('reference', 'index')
+            @slot('reference', 'RH.dashboard')
             @slot('name', 'Inicio')
         @endcomponent
         {{-- 
@@ -50,7 +50,7 @@
             @slot('icon')
                 <ion-icon name="bag-outline"></ion-icon>
             @endslot
-            @slot('reference', 'jornada.indexjornadas')
+            @slot('reference', 'jornada.index')
             @slot('name', 'Jornadas')
         @endcomponent
 
@@ -69,7 +69,18 @@
             @slot('reference', 'inasistencias.view')
             @slot('name', 'Inasistencia')
         @endcomponent
+        @component('_components.boxSidebar ')
+        @slot('icon')
+                <ion-icon name="checkbox-outline"></ion-icon>
+            @endslot
+        @slot('reference', 'inasistencias.indexRH')
+        @slot('name', 'Justificar inasistencias')
+        @endcomponent
 
+        @component('_components.boxSidebar ')
+        @slot('icon')
+            <ion-icon name="qr-code-outline"></ion-icon>
+        @endslot
 
         <li class="flex flex-1 items-center p-2 text-zinc-100 rounded-lg hover:bg-[#003230] group mb-1">
             <div class="pr-3.5"><ion-icon name="log-out-outline"></ion-icon></div>

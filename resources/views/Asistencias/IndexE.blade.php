@@ -1,6 +1,6 @@
 
 @section('sidebar')
-@include('layouts._partials.sidebar_admin')
+@include('layouts._partials.sidebar_empleado')
 @endsection
 
 @extends('layouts.app')

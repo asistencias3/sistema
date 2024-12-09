@@ -11,65 +11,91 @@ use Carbon\Carbon;
 use App\Mail\NotificacionInasistencia;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
-class AsistenciaController extends Controller
+class AsistenciaRHController extends Controller
 {
     public function index()
-{
-    $asistencias = Asistencia::with('empleadoSucursal')
-        ->where('estado', 1) // Solo asistencias
-        ->get();
+    {
+        $asistencias = Asistencia::with('empleadoSucursal')
+            ->where('estado', 1) // Solo asistencias activas
+            ->whereHas('empleadoSucursal', function($query) {
+                $query->whereIn('rol', [2, 3]); // Filtra por roles 2 y 3
+            })
+            ->get();
+    
+        return view('Asistencias.Index', compact('asistencias'));
+    }
+    
 
-    return view('Asistencias.Index', compact('asistencias'));
-}
-
-public function inasistencias()
-{
-    // Traer todas las inasistencias (estado = 0)
-    $inasistencias = Asistencia::with('empleadoSucursal')
-        ->where('estado', 0) // Solo inasistencias
-        ->get();
-
-    return view('inasistencias.index', compact('inasistencias'));
-}
+    public function inasistencias()
+    {
+       
+        $inasistencias = Asistencia::with('empleadoSucursal')
+            ->where('estado', 0) // Solo inasistencias
+            ->whereHas('empleadoSucursal', function($query) {
+                $query->whereIn('rol', [2, 3]); // Filtra por roles 2 y 3
+            })
+            ->get();
+    
+        return view('inasistencias.indexRH', compact('inasistencias'));
+    }
+    
 
 
     public function create()
-{
-    $empleados = User::all();
-    return view('Asistencias.Create', compact('empleados'));
-}
-
-
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'id_empleado_sucursal' => 'required|exists:users,id', 
-        'fecha' => 'required|date',
-        'hora_entrada' => 'required|date_format:H:i',
-        'hora_salida' => 'required|date_format:H:i',
-        'hora_segunda_entrada' => 'nullable|date_format:H:i',
-        'hora_segunda_salida' => 'nullable|date_format:H:i',
-    ]);
-
-    $validated['hora_entrada'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_entrada']);
-    $validated['hora_salida'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_salida']);
-    $validated['hora_segunda_entrada'] = $validated['hora_segunda_entrada'] 
-        ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_entrada']) 
-        : null;
-    $validated['hora_segunda_salida'] = $validated['hora_segunda_salida'] 
-        ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_salida']) 
-        : null;
-
-  
-    $validated['id_empleado'] = $validated['id_empleado_sucursal'];  
-
+    {
+        // Mostrar empleados con rol 3, si se requiere crear un nuevo empleado
+        $empleados = User::where('rol', 3)->get(); // Solo empleados con rol 3
+        return view('Asistencias.Create', compact('empleados'));
+    }
     
-    Asistencia::create($validated);
-
-    return redirect()->route('asistencias.index')->with('success', 'Asistencia creada con éxito.');
-}
 
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'id_empleado_sucursal' => 'required|exists:users,id,rol,3', // Solo permite empleados con rol 3
+            'fecha' => 'required|date',
+            'hora_entrada' => 'required|date_format:H:i',
+            'hora_salida' => 'required|date_format:H:i',
+            'hora_segunda_entrada' => 'nullable|date_format:H:i',
+            'hora_segunda_salida' => 'nullable|date_format:H:i',
+        ]);
+        
+        // Verificar si el id_empleado_sucursal es un nuevo empleado
+        if ($request->input('nuevo_empleado') == '1') {
+            // Crear un nuevo empleado con rol 3
+            $nuevoEmpleado = User::create([
+                'name' => $request->input('nombre_empleado'),
+                'email' => $request->input('email_empleado'),
+                'password' => bcrypt($request->input('password_empleado')),
+                'rol' => 3, // Asignar rol 3
+            ]);
+    
+            // Asignar el ID del nuevo empleado
+            $validated['id_empleado'] = $nuevoEmpleado->id;
+        } else {
+            $validated['id_empleado'] = $validated['id_empleado_sucursal'];  // Usar el id del empleado existente
+        }
+    
+        // Combinar fechas y horas
+        $validated['hora_entrada'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_entrada']);
+        $validated['hora_salida'] = $this->combineDateAndTime($validated['fecha'], $validated['hora_salida']);
+        $validated['hora_segunda_entrada'] = $validated['hora_segunda_entrada'] 
+            ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_entrada']) 
+            : null;
+        $validated['hora_segunda_salida'] = $validated['hora_segunda_salida'] 
+            ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_salida']) 
+            : null;
+    
+        // Asegurarse de que el campo 'estado' sea 1 (indicado como presente)
+        $validated['estado'] = 1;  // Se establece el estado como 1 (presente)
+    
+        // Crear la asistencia
+        Asistencia::create($validated);
+    
+        return redirect()->route('asistencias.index')->with('success', 'Asistencia creada con éxito.');
+    }
+    
 
 private function combineDateAndTime($date, $time)
 {
@@ -80,8 +106,8 @@ private function combineDateAndTime($date, $time)
 public function edit($id)
 {
     $asistencia = Asistencia::findOrFail($id);
-    $empleados = User::all();
 
+    $empleados = User::where('rol', 3)->get(); // Solo empleados con rol 3
     
     $asistencia->hora_entrada = Carbon::parse($asistencia->hora_entrada);
     $asistencia->hora_salida = Carbon::parse($asistencia->hora_salida);
@@ -94,6 +120,7 @@ public function edit($id)
 
     return view('Asistencias.Edit', compact('asistencia', 'empleados'));
 }
+
 
     public function update(Request $request, $id)
     {
@@ -139,7 +166,6 @@ public function edit($id)
     public function filtroPdf()
     {
         $roles = [
-            1 => 'Administrador',
             2 => 'Recursos Humanos',
             3 => 'Empleado',
         ];
@@ -193,41 +219,45 @@ public function mostrarInasistenciasView()
 
 public function obtenerInasistencias(Request $request)
 {
-   
+    // Validación de las fechas
     $request->validate([
         'fecha_inicio' => 'required|date',
         'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
     ]);
 
-    
     $fechaInicio = $request->input('fecha_inicio');
     $fechaFin = $request->input('fecha_fin');
 
-   
+    // Consulta para obtener los usuarios con rol 2 o 3 y sus inasistencias
     $inasistencias = User::select('users.id', 'users.name', 'users.rol', 'users.email')
+        ->whereIn('users.rol', [2, 3]) // Filtrar solo usuarios con rol 2 o 3
         ->with(['asistencias' => function ($query) use ($fechaInicio, $fechaFin) {
-            $query->where('estado', 0)
-                ->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+            $query->where('estado', 0) // Inasistencias (estado = 0)
+                ->whereBetween('fecha', [$fechaInicio, $fechaFin]); // Rango de fechas
         }])
         ->whereHas('asistencias', function ($query) use ($fechaInicio, $fechaFin) {
             $query->where('estado', 0)
-                ->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+                ->whereBetween('fecha', [$fechaInicio, $fechaFin]); // Rango de fechas
         })
         ->get()
         ->map(function ($user) {
-           
+            // Asignar nombres a los roles
             $roles = [
                 1 => 'Administrador',
                 2 => 'Recursos Humanos',
                 3 => 'Empleado',
             ];
-            $user->rol = $roles[$user->rol] ?? 'Desconocido';
+            $user->rol = $roles[$user->rol] ?? 'Desconocido'; // Asignar rol basado en el número
+            // Contar el número total de inasistencias y obtener las fechas
             $user->total_inasistencias = $user->asistencias->count();
             $user->fechas_inasistencias = $user->asistencias->pluck('fecha');
             return $user;
         });
+
+    // Retornar la respuesta en formato JSON
     return response()->json($inasistencias);
 }
+
 
 public function showI($id)
 {
@@ -269,7 +299,6 @@ public function justificarInasistencia(Request $request)
  public function filtroPdfI()
  {
      $roles = [
-         1 => 'Administrador',
          2 => 'Recursos Humanos',
          3 => 'Empleado',
      ];
@@ -284,7 +313,7 @@ public function justificarInasistencia(Request $request)
 
     $query = Asistencia::query()
         ->with('empleadoSucursal')
-        ->where('estado', 0);
+        ->where('estado', 0); // Solo inasistencias
 
     if (!empty($rol)) {
         $query->whereHas('empleadoSucursal', function ($q) use ($rol) {

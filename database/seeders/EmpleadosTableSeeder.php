@@ -34,6 +34,14 @@ class EmpleadosTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'id_usuario' => 6, // Empleado 3
+                'direccion' => 'Calle C #6',
+                'telefono' => '3456789010',
+                'sucursal' => 'Sucursal Sur',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

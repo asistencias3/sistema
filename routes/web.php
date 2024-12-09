@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\AsistenciaEController;
+use App\Http\Controllers\AsistenciaRHController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\JornadaController;
 use App\Http\Controllers\UsDashboordsController;

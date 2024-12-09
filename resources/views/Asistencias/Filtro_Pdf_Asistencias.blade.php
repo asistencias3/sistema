@@ -1,4 +1,7 @@
 <!-- resources/views/Asistencias/Filtro_Pdf_Asistencias.blade.php -->
+@section('sidebar')
+@include('layouts._partials.sidebar_admin')
+@endsection
 @extends('layouts.app')
 
 @section('content')

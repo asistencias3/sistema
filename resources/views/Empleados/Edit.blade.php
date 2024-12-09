@@ -1,9 +1,13 @@
 @extends('layouts.app')
+@section('sidebar')
+@include('layouts._partials.sidebar_admin')
+
+@endsection
 
 @section('content')
 <div class="container">
-    <h1>Editar Asistencia</h1>
-    <form action="{{ route('asistencias.update', $asistencia->id) }}" method="POST">
+    <h1 class="text-2xl font-bold text-[#004643]">Editar Asistencia</h1>
+    <form action="{{ route('asistencias.update', $asistencia->id) }}" method="POST" class="w-full bg-[#f6f4f5] p-6 rounded">
         @csrf
         @method('PUT')
         <div class="form-group">

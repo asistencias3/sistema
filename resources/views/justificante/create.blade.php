@@ -1,5 +1,7 @@
 {{-- Vista para editar una asistencia ya registrada (Solo Administrador) --}}
-@extends('layouts.user_view')
+@section('sidebar')
+@include('layouts._partials.sidebar_admin')
+@endsection
 
 @section('title', 'Asistencia')
 

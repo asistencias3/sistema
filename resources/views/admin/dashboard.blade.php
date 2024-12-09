@@ -3,7 +3,7 @@
 
 @endsection
 
-@extends('layouts.admin_view', ['headers'=>[]])
+@extends('layouts.user_view', ['headers'=>[]])
 
 @section('title', 'Index')
 

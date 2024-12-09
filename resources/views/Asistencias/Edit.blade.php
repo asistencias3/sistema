@@ -1,7 +1,8 @@
-@extends('layouts.app') 
- @include('layouts._partials.sidebar_RH') 
+@section('sidebar')
+@include('layouts._partials.sidebar_admin')
+@endsection
 
-
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
