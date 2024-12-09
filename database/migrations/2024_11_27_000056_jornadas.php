@@ -22,7 +22,7 @@ return new class extends Migration
         $table->time('fin_descanso');
         $table->string('sucursal');
         $table->string('qr_code_data')->nullable();
-        $table->string('qr_token')->unique(); // Agregar un token único
+        $table->string('qr_token')->nullable()->default(null);
         $table->timestamps();
     });
 }
