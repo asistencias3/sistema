@@ -284,7 +284,7 @@ public function justificarInasistencia(Request $request)
 
     $query = Asistencia::query()
         ->with('empleadoSucursal')
-        ->where('estado', 0); // Solo inasistencias
+        ->where('estado', 0);
 
     if (!empty($rol)) {
         $query->whereHas('empleadoSucursal', function ($q) use ($rol) {

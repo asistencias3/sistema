@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('asistencias', function (Blueprint $table) {
             $table->id();
             $table->boolean('estado')->default(0);
-            $table->foreignId('id_empleado')->constrained('users')->onDelete('cascade'); // Referencia a 'users'
+            $table->foreignId('id_empleado')->constrained('users')->onDelete('cascade');
             $table->date('fecha');
             $table->dateTime('hora_entrada');
             $table->dateTime('hora_salida');
