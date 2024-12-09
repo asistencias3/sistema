@@ -321,5 +321,30 @@ public function registrar(Request $request)
 }
 
 
-
+public function showI($id)
+{
+    $inasistencias = Asistencia::where('user_id', $id)->get();
+    return view('inasistencias.show', compact('inasistencias'));
+}
+public function justificarInasistencia(Request $request)
+{
+    // Agrega un log para verificar los datos recibidos
+    Log::info('Datos recibidos:', $request->all());
+    $request->validate([
+        'asistencia_id' => 'required|exists:asistencias,id',
+    ]);
+    $asistenciaId = $request->input('asistencia_id');
+    $asistencia = Asistencia::findOrFail($asistenciaId);
+    if ($asistencia->estado === 1) {
+        return response()->json([
+            'message' => 'La asistencia ya está justificada.',
+        ], 400);
+    }
+    $asistencia->estado = 1;
+    $asistencia->save();
+    return response()->json([
+        'message' => 'La inasistencia ha sido justificada con éxito.',
+        'asistencia' => $asistencia,
+    ]);
+}
 }
