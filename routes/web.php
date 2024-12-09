@@ -6,6 +6,7 @@ use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\JornadaController;
 use App\Http\Controllers\UsDashboordsController;
+use App\Http\Controllers\RHController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -93,8 +94,6 @@ Route::group(['prefix' => 'Administrador'], function() {
 
 });
 });
-
-
 Route::middleware(['auth', 'role:3'])->group(function () {
 
     Route::group(['prefix' => 'Empleados'], function() {
@@ -112,13 +111,43 @@ Route::middleware(['auth', 'role:2'])->group(function () {
         Route::get('/dashboard', [UsDashboordsController::class, 'RHDashboard'])->name('RH.dashboard');
     
     });
+
+    Route::prefix('asistencias')->name('asistencias.')->group(function () {
+        Route::get('/', [RHController::class, 'index'])->name('index');
+        Route::get('/create', [RHController::class, 'create'])->name('create');
+        Route::post('/', [RHController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [RHController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [RHController::class, 'update'])->name('update');
+        Route::delete('/{id}', [RHController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::get('asistencias/filtro-pdf', [RHController::class, 'filtroPdf'])->name('asistencias.filtroPdf');
+    Route::get('asistencias/generar-pdf', [RHController::class, 'generarPdf'])->name('asistencias.generarPdf');
+    Route::post('/get-empleados', [RHController::class, 'getEmpleadosPorRol'])->name('get.empleados');
+
+    Route::get('/inasistencias', [RHController::class, 'mostrarInasistenciasView'])->name('inasistencias.view');
+    Route::post('/inasistencias', [RHController::class, 'obtenerInasistencias'])->name('inasistencias.post');
+Route::prefix('inasistencias')->group(function () {
+        Route::get('/filtro-pdf', [RHController::class, 'filtroPdfI'])->name('inasistencias.filtroPdf');
+        Route::get('/generar-pdf', [RHController::class, 'generarPdfI'])->name('inasistencias.generarPdf');
+        Route::post('/get-empleados', [RHController::class, 'getEmpleadosPorRolI'])->name('inasistencias.getEmpleados');
+    });
+
+    Route::prefix('jornadas')->name('jornada.')->group(function () {
+        Route::get('/', [RHController::class, 'indexjornadas'])->name('indexjornadas');
+        Route::get('/create', [RHController::class, 'createjornadas'])->name('createjornadas');
+        Route::post('/', [RHController::class, 'storejornadas'])->name('storejornadas');
+        Route::get('/{id}', [RHController::class, 'showjornadas'])->name('showjornadas');
+        Route::get('/{id}/edit', [RHController::class, 'editjornadas'])->name('editjornadas');
+        Route::put('/{id}', [RHController::class, 'updatejornadas'])->name('updatejornadas');
+        Route::delete('/{id}', [RHController::class, 'destroyjornadas'])->name('destroyjornadas');
+        });
+
+
 });
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 require __DIR__ . '/auth.php';

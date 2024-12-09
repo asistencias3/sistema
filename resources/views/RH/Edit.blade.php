@@ -1,6 +1,5 @@
 @extends('layouts.app') 
- @include('layouts._partials.sidebar_RH') 
-
+@include('layouts._partials.sidebar_RH') 
 
 
 @section('content')

@@ -50,7 +50,7 @@
             @slot('icon')
                 <ion-icon name="bag-outline"></ion-icon>
             @endslot
-            @slot('reference', 'jornada.index')
+            @slot('reference', 'jornada.indexjornadas')
             @slot('name', 'Jornadas')
         @endcomponent
 
