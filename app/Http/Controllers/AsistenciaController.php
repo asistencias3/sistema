@@ -49,10 +49,9 @@ public function store(Request $request)
         ? $this->combineDateAndTime($validated['fecha'], $validated['hora_segunda_salida']) 
         : null;
 
-  
     $validated['id_empleado'] = $validated['id_empleado_sucursal'];  
+    $validated['estado'] = 1; // Valor por defecto aquí
 
-    
     Asistencia::create($validated);
 
     return redirect()->route('asistencias.index')->with('success', 'Asistencia creada con éxito.');
