@@ -60,22 +60,6 @@ public function buscarInAsistenciasEmp(Request $request)
     return view('Empleados.inasistencias', compact('asistencias', 'rol', 'empleado'));
 }
 
-public function showJornadas($id){
-    $jornada = Jornada::findOrFail($id); 
-
-    $qrData = json_encode([
-        'jornada_id' => $jornada->id,
-        'fecha_inicio' => $jornada->fecha_inicio,
-        'hora_entrada' => $jornada->hora_entrada,
-        'hora_salida' => $jornada->hora_salida,
-        'sucursal' => $jornada->sucursal
-    ]);
-
-    $qrCode = QrCode::size(200)->generate($qrData); 
-
-    return view('Empleados.showJornadas', compact('jornada', 'qrCode')); 
-    
-}
 
 public function storeAsistencias(Request $request)
 {
@@ -115,12 +99,18 @@ public function storeAsistencias(Request $request)
 
 
 
-public function asistenciasR()
-    {
-        $empleados = User::all();
-        return view('Empleados.asistenciasR', compact('empleados'));
-    }
-    
+public function asistenciasR(Request $request)
+{
+    // Recuperar los parámetros de la URL
+    $jornadaId = $request->query('jornada_id');
+    $horaSalida = $request->query('hora_salida');
+
+    // Opcional: Recuperar datos relacionados a la jornada si es necesario
+    $jornada = Jornada::find($jornadaId);
+
+    return view('Empleados.asistenciasR', compact('jornadaId', 'horaSalida', 'jornada'));
+}
+
 
 
     public function create()

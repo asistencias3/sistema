@@ -46,6 +46,18 @@
             <label for="hora_segunda_salida">Segunda Salida (opcional)</label>
             <input type="time" name="hora_segunda_salida" id="hora_segunda_salida" class="form-control">
         </div>
+        <!-- Mostrar información cargada desde el QR -->
+        @if(request()->has('jornada_id') && request()->has('hora_salida'))
+        <div class="form-group">
+            <label>Jornada ID</label>
+            <input type="text" class="form-control" value="{{ request()->query('jornada_id') }}" readonly>
+        </div>
+        <div class="form-group">
+            <label>Hora de Salida (QR)</label>
+            <input type="time" class="form-control" value="{{ request()->query('hora_salida') }}" readonly>
+        </div>
+        @endif
+
 
         <button type="submit" class="btn btn-primary">Guardar Asistencia</button>
     </form>
