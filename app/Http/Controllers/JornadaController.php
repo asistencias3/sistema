@@ -79,16 +79,15 @@ public function show($id)
 {
     $jornada = Jornada::findOrFail($id); 
 
-    // Generar el código QR con la información actual de la jornada
-    $qrData = json_encode([
+    $qrUrl = route('empleado.asistenciasR', [
         'jornada_id' => $jornada->id,
-        'fecha_inicio' => $jornada->fecha_inicio,
-        'hora_entrada' => $jornada->hora_entrada,
         'hora_salida' => $jornada->hora_salida,
-        'sucursal' => $jornada->sucursal
     ]);
+    
 
-    $qrCode = QrCode::size(200)->generate($qrData); 
+    $qrCode = QrCode::size(200)->generate($qrData);
+    //quiero que este qr me redirija a la vista  "empleado.asistenciasR" con los datos de jornada_id y hora_salida
+
 
     return view('jornada.show', compact('jornada', 'qrCode')); 
 }

@@ -10,6 +10,7 @@ class Asistencia extends Model
 
     protected $fillable = [
         'id_empleado',
+        'id_jornadas',
         'estado',
         'fecha',
         'hora_entrada',
@@ -25,7 +26,7 @@ class Asistencia extends Model
 
     public function jornada()
 {
-    return $this->belongsTo(Jornada::class);
+    return $this->belongsTo(Jornada::class, 'id_jornadas');
 }
 
 }

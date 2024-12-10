@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->boolean('estado')->default(0);
             $table->foreignId('id_empleado')->constrained('users')->onDelete('cascade'); // Referencia a 'users'
+            $table->foreignId('id_jornadas')->constrained('jornadas')->onDelete('cascade'); // Referencia a 'users'
             $table->date('fecha');
             $table->dateTime('hora_entrada');
             $table->dateTime('hora_salida');

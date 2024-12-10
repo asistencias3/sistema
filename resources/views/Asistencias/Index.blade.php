@@ -20,6 +20,7 @@
         <thead>
             <tr>
                 <th>Empleado</th>
+                <th>Id Jornada</th>
                 <th>Fecha</th>
                 <th>Hora Entrada</th>
                 <th>Hora Salida</th>
@@ -32,6 +33,7 @@
             @foreach($asistencias as $asistencia)
                 <tr>
                     <td>{{ $asistencia->empleadoSucursal->name }}</td> 
+                    <td>{{ $asistencia->jornada->id }}</td> 
                     <td>{{ $asistencia->fecha }}</td>
                     <td>{{ $asistencia->hora_entrada }}</td>
                     <td>{{ $asistencia->hora_salida }}</td>

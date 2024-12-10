@@ -33,6 +33,7 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'id_empleado_sucursal' => 'required|exists:users,id', 
+        'id_jornadas' => 'required|exists:jornadas,id', 
         'fecha' => 'required|date',
         'hora_entrada' => 'required|date_format:H:i',
         'hora_salida' => 'required|date_format:H:i',
@@ -88,6 +89,7 @@ public function edit($id)
         
         $validated = $request->validate([
             'id_empleado_sucursal' => 'required|integer|exists:users,id', 
+            'id_jornadas' => 'required|integer|exists:jornadas,id', 
             'fecha' => 'required|date',
             'hora_entrada' => 'nullable|date_format:H:i',
             'hora_salida' => 'nullable|date_format:H:i',

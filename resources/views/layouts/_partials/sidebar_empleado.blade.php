@@ -63,15 +63,13 @@
             @slot('reference', 'empleado.inasistencia')
             @slot('name', 'Inasistencia')
         @endcomponent
-        <!--
-            esto es aparte para el qr
-        -->
+
         @component('_components.boxSidebar ')
             @slot('icon')
                 <ion-icon name="checkbox-outline"></ion-icon>
             @endslot
-            @slot('reference', 'empleado.jornadas')
-            @slot('name', 'Jornadas')
+            @slot('reference', 'empleado.asistenciasR')
+            @slot('name', 'Crear Asistencia')
         @endcomponent
 
         <li class="flex flex-1 items-center p-2 text-zinc-100 rounded-lg hover:bg-[#003230] group mb-1">

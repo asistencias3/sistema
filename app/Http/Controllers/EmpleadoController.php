@@ -60,67 +60,57 @@ public function buscarInAsistenciasEmp(Request $request)
     return view('Empleados.inasistencias', compact('asistencias', 'rol', 'empleado'));
 }
 
-public function showJornadas($id){
-    $jornada = Jornada::findOrFail($id); 
 
-    $qrData = json_encode([
-        'jornada_id' => $jornada->id,
-        'fecha_inicio' => $jornada->fecha_inicio,
-        'hora_entrada' => $jornada->hora_entrada,
-        'hora_salida' => $jornada->hora_salida,
-        'sucursal' => $jornada->sucursal
-    ]);
-
-    $qrCode = QrCode::size(200)->generate($qrData); 
-
-    return view('Empleados.showJornadas', compact('jornada', 'qrCode')); 
-    
-}
-
-public function registrar(Request $request)
+public function storeAsistencias(Request $request)
 {
-    // Obtener el usuario desde la sesión
-    $usuario = User::find(session('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'));
+    $user = auth()->user();
+    $empleado = $user->empleado;
 
-    if (!$usuario) {
-        return redirect()->route('login')->with('error', 'Debes estar logueado.');
+    if (!$empleado) {
+        return redirect()->route('login')->with('error', 'Debes estar logueado como empleado.');
     }
 
-    // Obtener la jornada desde el formulario
-    $jornada = Jornada::findOrFail($request->input('jornada_id'));
-
-    // Formatear las horas de entrada y salida de la jornada
-    $horaEntrada = Carbon::parse($jornada->hora_entrada)->format('Y-m-d H:i:s');
-    $horaSalida = Carbon::parse($jornada->hora_salida)->format('Y-m-d H:i:s');
-    
-    // Asignar hora_segunda_entrada = hora_salida de jornada
-    $horaSegundaEntrada = $horaSalida;
-
-    // Asignar hora_segunda_salida = hora_entrada de jornada
-    $horaSegundaSalida = $horaEntrada;
-
-    // Crear y guardar la asistencia
-    Asistencia::create([
-        'estado' => 1, // Estado: presente
-        'id_empleado' => $usuario->id,
-        'fecha' => now()->format('Y-m-d'),
-        'hora_entrada' => $horaEntrada, // Hora de entrada de la jornada
-        'hora_salida' => $horaSalida, // Hora de salida de la jornada
-        'hora_segunda_entrada' => $horaSegundaEntrada, // Hora segunda entrada = hora salida de jornada
-        'hora_segunda_salida' => $horaSegundaSalida, // Hora segunda salida = hora entrada de jornada
+    $validated = $request->validate([
+        'hora_salida' => 'required|date_format:H:i',
+        'hora_segunda_entrada' => 'nullable|date_format:H:i',
+        'hora_segunda_salida' => 'nullable|date_format:H:i',
     ]);
 
-    return redirect()->route('empleado.asistencia', $jornada->id)
-        ->with('success', 'Asistencia registrada exitosamente.');
+    // Generar las fechas y horas completas para insertar en el formato correcto
+    $fechaActual = now()->format('Y-m-d'); // Fecha de hoy
+    $horaEntradaCompleta = now()->format('Y-m-d H:i:s'); // Hora actual completa
+    $horaSalidaCompleta = $fechaActual . ' ' . $validated['hora_salida'] . ':00';
+    $horaSegundaEntradaCompleta = $validated['hora_segunda_entrada'] ? $fechaActual . ' ' . $validated['hora_segunda_entrada'] . ':00' : null;
+    $horaSegundaSalidaCompleta = $validated['hora_segunda_salida'] ? $fechaActual . ' ' . $validated['hora_segunda_salida'] . ':00' : null;
+
+    // Insertar en la base de datos
+    Asistencia::create([
+        'id_empleado' => $empleado->id,
+        'fecha' => $fechaActual,
+        'hora_entrada' => $horaEntradaCompleta,
+        'hora_salida' => $horaSalidaCompleta,
+        'hora_segunda_entrada' => $horaSegundaEntradaCompleta,
+        'hora_segunda_salida' => $horaSegundaSalidaCompleta,
+        'estado' => 1,
+    ]);
+
+    return redirect()->route('empleado.asistencia')->with('success', 'Asistencia registrada exitosamente.');
 }
 
 
-public function Jornadas()
-    {
-        $jornadas = Jornada::all(); 
-        return view('Empleados.jornadas', compact('jornadas')); 
-    }
-    
+
+public function asistenciasR(Request $request)
+{
+    // Recuperar los parámetros de la URL
+    $jornadaId = $request->query('jornada_id');
+    $horaSalida = $request->query('hora_salida');
+
+    // Opcional: Recuperar datos relacionados a la jornada si es necesario
+    $jornada = Jornada::find($jornadaId);
+
+    return view('Empleados.asistenciasR', compact('jornadaId', 'horaSalida', 'jornada'));
+}
+
 
 
     public function create()

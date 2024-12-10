@@ -22,6 +22,7 @@ class AsistenciasTableSeeder extends Seeder
                 DB::table('asistencias')->insert([
                     'estado' => rand(0, 1), // Estado aleatorio (0 o 1)
                     'id_empleado' => $empleado->id,
+                    'id_jornadas' => 1,
                     'fecha' => Carbon::now()->subDays(rand(0, 30)), // Fecha aleatoria en los últimos 30 días
                     'hora_entrada' => Carbon::now()->subDays(rand(0, 30))->setTime(rand(7, 9), rand(0, 59)), // Hora de entrada aleatoria entre 7 AM y 9 AM
                     'hora_salida' => Carbon::now()->subDays(rand(0, 30))->setTime(rand(16, 18), rand(0, 59)), // Hora de salida aleatoria entre 4 PM y 6 PM
