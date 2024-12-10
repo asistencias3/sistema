@@ -22,11 +22,17 @@ class AsistenciaController extends Controller
     return view('Asistencias.Index', compact('asistencias'));
 }
 
-    public function create()
+public function create()
 {
-    $empleados = User::all();
-    return view('Asistencias.Create', compact('empleados'));
+    $empleados = User::all(); // Obtiene todos los empleados
+    $jornadas = Jornada::all()->map(function ($jornada) {
+        $jornada->fecha_inicio = \Carbon\Carbon::parse($jornada->fecha_inicio)->format('d-m-Y'); // Formato deseado
+        $jornada->fecha_fin = \Carbon\Carbon::parse($jornada->fecha_fin)->format('d-m-Y'); // Formato deseado
+        return $jornada;
+    });
+    return view('Asistencias.Create', compact('empleados', 'jornadas'));
 }
+
 
 
 public function store(Request $request)
@@ -297,29 +303,34 @@ public function registrar(Request $request)
     $jornada = Jornada::findOrFail($request->input('jornada_id'));
 
     // Formatear las horas de entrada y salida de la jornada
-    $horaEntrada = Carbon::parse($jornada->hora_entrada)->format('Y-m-d H:i:s');
-    $horaSalida = Carbon::parse($jornada->hora_salida)->format('Y-m-d H:i:s');
-    
-    // Asignar hora_segunda_entrada = hora_salida de jornada
-    $horaSegundaEntrada = $horaSalida;
+    $horaEntrada = $jornada->hora_entrada 
+        ? Carbon::parse($jornada->hora_entrada)->format('Y-m-d H:i:s') 
+        : null;
 
-    // Asignar hora_segunda_salida = hora_entrada de jornada
-    $horaSegundaSalida = $horaEntrada;
+    $horaSalida = $jornada->hora_salida 
+        ? Carbon::parse($jornada->hora_salida)->format('Y-m-d H:i:s') 
+        : null;
+
+    if (!$horaEntrada || !$horaSalida) {
+        return back()->withErrors('La jornada seleccionada no tiene horarios válidos.');
+    }
 
     // Crear y guardar la asistencia
     Asistencia::create([
-        'estado' => 1, // Estado: presente
+        'estado' => 1, 
+        'id_jornadas' => $jornada->id,
         'id_empleado' => $usuario->id,
         'fecha' => now()->format('Y-m-d'),
-        'hora_entrada' => $horaEntrada, // Hora de entrada de la jornada
-        'hora_salida' => $horaSalida, // Hora de salida de la jornada
-        'hora_segunda_entrada' => $horaSegundaEntrada, // Hora segunda entrada = hora salida de jornada
-        'hora_segunda_salida' => $horaSegundaSalida, // Hora segunda salida = hora entrada de jornada
+        'hora_entrada' => $horaEntrada,
+        'hora_salida' => $horaSalida,
+        'hora_segunda_entrada' => $horaSalida, 
+        'hora_segunda_salida' => $horaEntrada, 
     ]);
 
     return redirect()->route('asistencias.index', $jornada->id)
         ->with('success', 'Asistencia registrada exitosamente.');
 }
+
 
 
 public function showI($id)

@@ -59,7 +59,7 @@ class JornadaController extends Controller
         $jornada->save();
     
         // Crear datos para el QR
-        $qrData = json_encode([
+        $qrUrl = json_encode([
             'jornada_id' => $jornada->id,
             'fecha_inicio' => $jornada->fecha_inicio,
             'hora_entrada' => $jornada->hora_entrada,
@@ -69,7 +69,7 @@ class JornadaController extends Controller
         ]);
     
         // Generar y guardar el código QR
-        $jornada->update(['qr_code_data' => $qrData]);
+        $jornada->update(['qr_code_data' => $qrUrl]);
     
         // Redirigir al usuario con un mensaje de éxito
         return redirect()->route('jornada.show', $jornada->id)->with('success', 'Jornada creada con éxito!');
@@ -85,7 +85,7 @@ public function show($id)
     ]);
     
 
-    $qrCode = QrCode::size(200)->generate($qrData);
+    $qrCode = QrCode::size(200)->generate($qrUrl);
     //quiero que este qr me redirija a la vista  "empleado.asistenciasR" con los datos de jornada_id y hora_salida
 
 

@@ -25,6 +25,32 @@
         </div>
 
         <div class="form-group">
+    <label for="id_jornadas">Jornada</label>
+    <select name="id_jornadas" id="id_jornadas" class="form-control" required>
+        <option value="">Selecciona una jornada</option>
+        @foreach($jornadas as $jornada)
+        <option value="{{ $jornada->id }}">
+    Fecha inicio: {{ \Carbon\Carbon::parse($jornada->fecha_inicio)->format('d-m-Y') }} - 
+    Fecha fin: {{ \Carbon\Carbon::parse($jornada->fecha_fin)->format('d-m-Y') }} - 
+    Hora entrada: {{ \Carbon\Carbon::parse($jornada->hora_entrada)->format('H:i') }} - 
+    Hora salida: {{ \Carbon\Carbon::parse($jornada->hora_salida)->format('H:i') }} - 
+    Inicio descanso: {{ \Carbon\Carbon::parse($jornada->inicio_descanso)->format('H:i') }} - 
+    Fin descanso: {{ \Carbon\Carbon::parse($jornada->fin_descanso)->format('H:i') }} - 
+    Sucursal: {{ $jornada->sucursal }}
+</option>
+
+
+</option>
+
+        @endforeach
+    </select>
+    @error('id_jornadas')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>
+
+
+        <div class="form-group">
             <label for="fecha">Fecha</label>
             <input type="date" name="fecha" id="fecha" class="form-control" required>
             @error('fecha')
