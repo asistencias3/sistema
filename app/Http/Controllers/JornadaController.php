@@ -85,7 +85,7 @@ public function show($id)
     ]);
     
 
-    $qrCode = QrCode::size(200)->generate($qrData);
+    $qrCode = QrCode::size(200)->generate($qrUrl);
     //quiero que este qr me redirija a la vista  "empleado.asistenciasR" con los datos de jornada_id y hora_salida
 
 
