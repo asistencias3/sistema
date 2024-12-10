@@ -27,8 +27,4 @@ class Jornada extends Model
         return $this->hasMany(EmpleadoSucursal::class);
     }
 
-    public function asistencia()
-{
-    return $this->belongsTo(Asistencia::class);
-}
 }
